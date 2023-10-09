@@ -6,8 +6,10 @@ import org.apache.logging.log4j.Logger;
 public final class Task0 {
     private final static Logger LOGGER = LogManager.getLogger();
 
-    public static void helloWorld() {
+    private Task0() {
+    }
 
+    public static void helloWorld() {
         LOGGER.info("Привет, мир!");
     }
 }

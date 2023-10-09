@@ -1,13 +1,11 @@
 package edu.hw1;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Task2Test {
+public class Task2Test {
     @Test
-    @DisplayName("Количество цифр")
-    void countDigits() {
+    void countDigitsFirst() {
         // given zero
         int number = 0;
 
@@ -17,42 +15,54 @@ class Task2Test {
         // then
         assertThat(digitsCount)
             .isEqualTo(1);
+    }
 
+    @Test
+    void countDigitsSecond() {
         // given a positive number < 10
-        number = 5;
+        int number = 5;
 
         // when
-        digitsCount = Task2.countDigits(number);
+        int digitsCount = Task2.countDigits(number);
 
         // then
         assertThat(digitsCount)
             .isEqualTo(1);
+    }
 
+    @Test
+    void countDigitsThird() {
         // given a positive number > 10
-        number = 4666;
+        int number = 4666;
 
         // when
-        digitsCount = Task2.countDigits(number);
+        int digitsCount = Task2.countDigits(number);
 
         // then
         assertThat(digitsCount)
             .isEqualTo(4);
+    }
 
-        // given a negative number < 10
-        number = -9;
+    @Test
+    void countDigitsFourth() {
+        // given a negative number > -10
+        int number = -9;
 
         // when
-        digitsCount = Task2.countDigits(number);
+        int digitsCount = Task2.countDigits(number);
 
         // then
         assertThat(digitsCount)
             .isEqualTo(1);
+    }
 
+    @Test
+    void countDigitsFifth() {
         // given a negative number < -10
-        number = -13894;
+        int number = -13894;
 
         // when
-        digitsCount = Task2.countDigits(number);
+        int digitsCount = Task2.countDigits(number);
 
         // then
         assertThat(digitsCount)

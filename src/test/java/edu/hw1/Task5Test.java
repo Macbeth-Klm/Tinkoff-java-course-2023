@@ -1,13 +1,11 @@
 package edu.hw1;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Task5Test {
+public class Task5Test {
     @Test
-    @DisplayName("Особый палиндром")
-    void isPalindromeDescendant() {
+    void isPalindromeDescendantFirst() {
         // given number, whose descendant is a palindrome
         int number = 112112301;
 
@@ -17,32 +15,41 @@ class Task5Test {
         // then
         assertThat(resultTest)
             .isEqualTo(true);
+    }
 
+    @Test
+    void isPalindromeDescendantSecond() {
         // given a palindrome
-        number = 363;
+        int number = 363;
 
         // when
-        resultTest = Task5.isPalindromeDescendant(number);
+        boolean resultTest = Task5.isPalindromeDescendant(number);
 
         // then
         assertThat(resultTest)
             .isEqualTo(true);
+    }
 
+    @Test
+    void isPalindromeDescendantThird() {
         // given a number < 10
-        number = 6;
+        int number = 6;
 
         // when
-        resultTest = Task5.isPalindromeDescendant(number);
+        boolean resultTest = Task5.isPalindromeDescendant(number);
 
         // then
         assertThat(resultTest)
             .isEqualTo(false);
+    }
 
+    @Test
+    void isPalindromeDescendantFourth() {
         // given number, whose descendants are not a palindrome
-        number = 54442;
+        int number = 54442;
 
         // when
-        resultTest = Task5.isPalindromeDescendant(number);
+        boolean resultTest = Task5.isPalindromeDescendant(number);
 
         // then
         assertThat(resultTest)

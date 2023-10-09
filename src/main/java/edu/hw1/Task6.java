@@ -1,13 +1,19 @@
 package edu.hw1;
 
-public class Task6 {
-    public static int countK(int input, int count) {
-        if (input < 1001 || input > 9999) {
+public final class Task6 {
+    private final static int MIN_VALUE = 1001;
+    private final static int MAX_VALUE = 9999;
+    private final static int RESULT_VALUE = 6174;
+
+    private Task6() {
+    }
+
+    public static int countK(int input) {
+        if (input < MIN_VALUE || input > MAX_VALUE) {
             return -1;
-        } else if (input == 6174) {
+        } else if (input == RESULT_VALUE) {
             return 0;
         }
-
         String inputString = Integer.toString(input);
         char[] digits = inputString.toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -21,17 +27,13 @@ public class Task6 {
             }
             sb.append(digits[i]);
         }
-
         int maxValue = Integer.parseInt(sb.toString());
-        sb = new StringBuilder();
+        sb.setLength(0);
         for (int i = digits.length - 1; i > -1; i--) {
             sb.append(digits[i]);
         }
-
         int minValue = Integer.parseInt(sb.toString());
         int res = maxValue - minValue;
-        count += 1 + countK(res, count);
-
-        return count;
+        return 1 + countK(res);
     }
 }

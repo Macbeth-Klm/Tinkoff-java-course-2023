@@ -3,7 +3,7 @@ package edu.hw1;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Task1Test {
+public class Task1Test {
     @Test
     void minutesToSecondsFirst() {
         // given seconds = 0

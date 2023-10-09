@@ -1,14 +1,12 @@
 package edu.hw1;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Task8Test {
+public class Task8Test {
     @Test
-    @DisplayName("Кони на доске")
-    void knightBoardCapture() {
+    void knightBoardCaptureFirst() {
         // given
         int[][] chessBoard = new int[][] {
             {0, 0, 0, 1, 0, 0, 0, 0},
@@ -23,13 +21,15 @@ class Task8Test {
 
         // when
         boolean result = Task8.knightBoardCapture(chessBoard);
-
         // then
         assertThat(result)
             .isEqualTo(true);
+    }
 
+    @Test
+    void knightBoardCaptureSecond() {
         // given
-        chessBoard = new int[][] {
+        int[][] chessBoard = new int[][] {
             {1, 0, 1, 0, 1, 0, 1, 0},
             {0, 1, 0, 1, 0, 1, 0, 1},
             {0, 0, 0, 0, 1, 0, 1, 0},
@@ -41,13 +41,16 @@ class Task8Test {
         };
 
         // when
-        result = Task8.knightBoardCapture(chessBoard);
+        boolean result = Task8.knightBoardCapture(chessBoard);
 
         // then
         assertThat(result)
             .isEqualTo(false);
+    }
 
-        // given invalid array columns
+    @Test
+    void knightBoardCaptureThird() {
+        // given invalid array rows
         final int[][] invalidColumnsChessBoard = new int[][] {
             {0, 0, 0, 0, 1, 0, 0, 0},
             {0, 0, 0, 0, 0, 1, 0, 0},
@@ -65,8 +68,11 @@ class Task8Test {
                 Task8.knightBoardCapture(invalidColumnsChessBoard));
 
         // then
-        Assertions.assertEquals("Массив некорректного размера!", resultException.getMessage());
+        Assertions.assertEquals("Массив некорректный!", resultException.getMessage());
+    }
 
+    @Test
+    void knightBoardCaptureFourth() {
         // given invalid array rows
         final int[][] invalidRowsChessBoard = new int[][] {
             {0, 0, 0, 0, 1, 0, 0, 0},
@@ -81,12 +87,15 @@ class Task8Test {
         };
 
         // when
-        resultException = Assertions.assertThrows(IllegalArgumentException.class, () ->
+        IllegalArgumentException resultException = Assertions.assertThrows(IllegalArgumentException.class, () ->
             Task8.knightBoardCapture(invalidRowsChessBoard));
 
         // then
-        Assertions.assertEquals("Массив некорректного размера!", resultException.getMessage());
+        Assertions.assertEquals("Массив некорректный!", resultException.getMessage());
+    }
 
+    @Test
+    void knightBoardCaptureFifth() {
         // given array containing invalid numbers
         final int[][] invalidNumbersChessBoard = new int[][] {
             {0, 0, 0, 0, 1, 0, 0, 0},
@@ -100,10 +109,10 @@ class Task8Test {
         };
 
         // when
-        resultException = Assertions.assertThrows(IllegalArgumentException.class, () ->
+        IllegalArgumentException resultException = Assertions.assertThrows(IllegalArgumentException.class, () ->
             Task8.knightBoardCapture(invalidNumbersChessBoard));
 
         // then
-        Assertions.assertEquals("Массив содержит некорректные данные!", resultException.getMessage());
+        Assertions.assertEquals("Массив некорректный!", resultException.getMessage());
     }
 }

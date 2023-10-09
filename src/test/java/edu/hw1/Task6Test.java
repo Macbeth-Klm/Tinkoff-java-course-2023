@@ -1,48 +1,55 @@
 package edu.hw1;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Task6Test {
+public class Task6Test {
     @Test
-    @DisplayName("Постоянная Капрекара")
-    void countK() {
-        // given correct number != 6174
+    void countKFirst() {
+        // given correct number != RESULT_VALUE
         int number = 6621;
 
         // when
-        int count = Task6.countK(number, 0);
+        int count = Task6.countK(number);
 
         // then
         assertThat(count)
             .isEqualTo(5);
+    }
 
-        // given number = 6174
-        number = 6174;
+    @Test
+    void countKSecond() {
+        // given number = RESULT_VALUE
+        int number = 6174;
 
         // when
-        count = Task6.countK(number, 0);
+        int count = Task6.countK(number);
 
         // then
         assertThat(count)
             .isEqualTo(0);
+    }
 
-        // given number < 1001
-        number = 483;
+    @Test
+    void countKThird() {
+        // given number < MIN_VALUE
+        int number = 483;
 
         // when
-        count = Task6.countK(number, 0);
+        int count = Task6.countK(number);
 
         // then
         assertThat(count)
             .isEqualTo(-1);
+    }
 
-        // given number > 9999
-        number = 10000;
+    @Test
+    void countKFourth() {
+        // given number > MAX_VALUE
+        int number = 10000;
 
         // when
-        count = Task6.countK(number, 0);
+        int count = Task6.countK(number);
 
         // then
         assertThat(count)

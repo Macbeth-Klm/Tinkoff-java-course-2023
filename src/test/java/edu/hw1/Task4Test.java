@@ -1,13 +1,11 @@
 package edu.hw1;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Task4Test {
+public class Task4Test {
     @Test
-    @DisplayName("Сломанная строка")
-    void fixString() {
+    void fixStringFirst() {
         // given the string of even length
         String inputString = "hTsii  s aimex dpus rtni.g";
 
@@ -17,12 +15,15 @@ class Task4Test {
         // then
         assertThat(resultString)
             .isEqualTo("This is a mixed up string.");
+    }
 
+    @Test
+    void fixStringSecond() {
         // given the string of odd length
-        inputString = "eHll ooWlr!d: )";
+        String inputString = "eHll ooWlr!d: )";
 
         // when
-        resultString = Task4.fixString(inputString);
+        String resultString = Task4.fixString(inputString);
 
         // then
         assertThat(resultString)

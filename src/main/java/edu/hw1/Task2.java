@@ -1,12 +1,16 @@
 package edu.hw1;
 
-public class Task2 {
+public final class Task2 {
+    private final static int DIVIDER = 10;
+
+    private Task2() {
+    }
+
     public static int countDigits(int inputNumber) {
         int res = 0;
         int remainingNumbers = inputNumber;
-
         do {
-            remainingNumbers /= 10;
+            remainingNumbers /= DIVIDER;
             res++;
         } while (remainingNumbers != 0);
 
