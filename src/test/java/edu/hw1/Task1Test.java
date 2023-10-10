@@ -6,33 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Task1Test {
     @Test
     void minutesToSecondsFirst() {
-        // given seconds = 0
-        String videoDuration = "10:00";
-
-        // when
-        int durationToSeconds = Task1.minutesToSeconds(videoDuration);
-
-        // then
-        assertThat(durationToSeconds)
-            .isEqualTo(600);
-    }
-
-    @Test
-    void minutesToSecondsSecond() {
-        // given minutes = 0
-        String videoDuration = "00:13";
-
-        // when
-        int durationToSeconds = Task1.minutesToSeconds(videoDuration);
-
-        // then
-        assertThat(durationToSeconds)
-            .isEqualTo(13);
-    }
-
-    @Test
-    void minutesToSecondsThird() {
-        // given
+        // given correct duration
         String videoDuration = "13:56";
 
         // when
@@ -44,9 +18,35 @@ public class Task1Test {
     }
 
     @Test
-    void minutesToSecondsFourth() {
-        // given seconds >= MAX_SECONDS
-        String videoDuration = "10:60";
+    void minutesToSecondsSecond() {
+        // given input String without ":"
+        String videoDuration = "10 60";
+
+        // when
+        int durationToSeconds = Task1.minutesToSeconds(videoDuration);
+
+        // then
+        assertThat(durationToSeconds)
+            .isEqualTo(-1);
+    }
+
+    @Test
+    void minutesToSecondsThird() {
+        // minutesAndSeconds[1].length() != 2
+        String videoDuration = "13:503";
+
+        // when
+        int durationToSeconds = Task1.minutesToSeconds(videoDuration);
+
+        // then
+        assertThat(durationToSeconds)
+            .isEqualTo(-1);
+    }
+
+    @Test
+    void minutesToFourth() {
+        // given NumberFormatException in String.parseInt()
+        String videoDuration = "21324653634232111:60";
 
         // when
         int durationToSeconds = Task1.minutesToSeconds(videoDuration);
@@ -71,8 +71,8 @@ public class Task1Test {
 
     @Test
     void minutesToSecondsSixth() {
-        // given (minutes * 60 + seconds) > Integer.MAX_VALUE
-        String videoDuration = "300000000:15";
+        // given seconds >= MAX_SECONDS
+        String videoDuration = "10:60";
 
         // when
         int durationToSeconds = Task1.minutesToSeconds(videoDuration);
@@ -84,8 +84,8 @@ public class Task1Test {
 
     @Test
     void minutesToSecondsSeventh() {
-        // given invalid string
-        String videoDuration = "16.40";
+        // given (minutes * 60 + seconds) > Integer.MAX_VALUE
+        String videoDuration = "90000000:15";
 
         // when
         int durationToSeconds = Task1.minutesToSeconds(videoDuration);
