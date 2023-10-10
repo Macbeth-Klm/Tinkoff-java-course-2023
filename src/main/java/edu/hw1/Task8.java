@@ -12,14 +12,9 @@ public final class Task8 {
         }
 
         for (int i = 0; i < ARRAY_LENGTH; i++) {
-            for (int j = 0; j < ARRAY_LENGTH; j++) {
-                if (chessBoard[i][j] == 1) {
-                    if (j - 2 > 0 && i + 1 < ARRAY_LENGTH && chessBoard[i + 1][j - 2] == 1
-                        || j + 2 < ARRAY_LENGTH && i + 1 < ARRAY_LENGTH && chessBoard[i + 1][j + 2] == 1
-                        || j - 1 > 0 && i + 2 < ARRAY_LENGTH && chessBoard[i + 2][j - 1] == 1
-                        || j + 1 < ARRAY_LENGTH && i + 2 < ARRAY_LENGTH && chessBoard[i + 2][j + 1] == 1) {
-                        return false;
-                    }
+            for (int j = 0; j < ARRAY_LENGTH - 1; j++) {
+                if (chessBoard[i][j] == 1 && doesKnightCapture(chessBoard, i, j)) {
+                    return false;
                 }
             }
         }
@@ -42,5 +37,12 @@ public final class Task8 {
             }
         }
         return true;
+    }
+
+    public static boolean doesKnightCapture(int[][] chessBoard, int i, int j) {
+        return j - 2 > 0 && i + 1 < ARRAY_LENGTH && chessBoard[i + 1][j - 2] == 1
+                || j + 2 < ARRAY_LENGTH && i + 1 < ARRAY_LENGTH && chessBoard[i + 1][j + 2] == 1
+                || j - 1 > 0 && i + 2 < ARRAY_LENGTH && chessBoard[i + 2][j - 1] == 1
+                || j + 1 < ARRAY_LENGTH && i + 2 < ARRAY_LENGTH && chessBoard[i + 2][j + 1] == 1;
     }
 }

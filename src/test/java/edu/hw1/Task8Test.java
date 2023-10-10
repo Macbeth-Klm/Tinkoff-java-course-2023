@@ -50,7 +50,7 @@ public class Task8Test {
 
     @Test
     void knightBoardCaptureThird() {
-        // given invalid array rows
+        // given invalid array columns
         final int[][] invalidColumnsChessBoard = new int[][] {
             {0, 0, 0, 0, 1, 0, 0, 0},
             {0, 0, 0, 0, 0, 1, 0, 0},
