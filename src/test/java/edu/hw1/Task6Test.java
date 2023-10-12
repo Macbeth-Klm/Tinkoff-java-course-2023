@@ -27,7 +27,7 @@ public class Task6Test {
 
         // then
         assertThat(count)
-            .isEqualTo(0);
+            .isZero();
     }
 
     @Test

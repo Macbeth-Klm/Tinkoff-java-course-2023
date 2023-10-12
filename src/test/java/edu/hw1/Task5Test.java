@@ -14,7 +14,7 @@ public class Task5Test {
 
         // then
         assertThat(resultTest)
-            .isEqualTo(true);
+            .isTrue();
     }
 
     @Test
@@ -27,7 +27,7 @@ public class Task5Test {
 
         // then
         assertThat(resultTest)
-            .isEqualTo(true);
+            .isTrue();
     }
 
     @Test
@@ -40,7 +40,7 @@ public class Task5Test {
 
         // then
         assertThat(resultTest)
-            .isEqualTo(false);
+            .isFalse();
     }
 
     @Test
@@ -53,6 +53,6 @@ public class Task5Test {
 
         // then
         assertThat(resultTest)
-            .isEqualTo(false);
+            .isFalse();
     }
 }

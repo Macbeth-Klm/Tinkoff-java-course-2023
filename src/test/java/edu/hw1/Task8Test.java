@@ -23,7 +23,7 @@ public class Task8Test {
         boolean result = Task8.knightBoardCapture(chessBoard);
         // then
         assertThat(result)
-            .isEqualTo(true);
+            .isTrue();
     }
 
     @Test
@@ -45,7 +45,7 @@ public class Task8Test {
 
         // then
         assertThat(result)
-            .isEqualTo(false);
+            .isFalse();
     }
 
     @Test

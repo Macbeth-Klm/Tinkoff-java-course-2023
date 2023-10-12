@@ -1,9 +1,9 @@
 package edu.hw1;
 
 public final class Task6 {
-    private final static int MIN_VALUE = 1001;
-    private final static int MAX_VALUE = 9999;
-    private final static int RESULT_VALUE = 6174;
+    private static final int MIN_VALUE = 1001;
+    private static final int MAX_VALUE = 9999;
+    private static final int RESULT_VALUE = 6174;
 
     private Task6() {
     }

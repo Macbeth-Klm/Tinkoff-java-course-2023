@@ -1,7 +1,7 @@
 package edu.hw1;
 
 public final class Task8 {
-    private final static int ARRAY_LENGTH = 8;
+    private static final int ARRAY_LENGTH = 8;
 
     private Task8() {
     }

@@ -1,7 +1,7 @@
 package edu.hw1;
 
 public final class Task1 {
-    private final static int MAX_SECONDS = 60;
+    private static final int MAX_SECONDS = 60;
 
     private Task1() {
     }

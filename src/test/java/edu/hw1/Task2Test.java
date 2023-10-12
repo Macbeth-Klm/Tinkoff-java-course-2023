@@ -14,7 +14,7 @@ public class Task2Test {
 
         // then
         assertThat(digitsCount)
-            .isEqualTo(1);
+            .isOne();
     }
 
     @Test
@@ -27,7 +27,7 @@ public class Task2Test {
 
         // then
         assertThat(digitsCount)
-            .isEqualTo(1);
+            .isOne();
     }
 
     @Test
@@ -53,7 +53,7 @@ public class Task2Test {
 
         // then
         assertThat(digitsCount)
-            .isEqualTo(1);
+            .isOne();
     }
 
     @Test
