@@ -4,17 +4,6 @@ public class Rectangle {
     protected int width;
     protected int height;
 
-    public Rectangle() {
-    }
-
-    public Rectangle(int width, int height) {
-        if (width < 0 || height < 0) {
-            throw new IllegalArgumentException("Неправильно введены стороны!");
-        }
-        this.width = width;
-        this.height = height;
-    }
-
     public Rectangle setWidth(int width) {
         if (width < 0) {
             throw new IllegalArgumentException("Ширина не может быть отрицательной!");

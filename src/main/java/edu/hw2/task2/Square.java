@@ -5,20 +5,26 @@ public class Square extends Rectangle {
     @Override
     public Rectangle setWidth(int width) {
         if (this.width != 0) {
-            return new Rectangle(width, height);
+            Rectangle newRect = new Rectangle();
+            newRect.setWidth(width);
+            newRect.setHeight(height);
+            return newRect;
         }
-        super.setHeight(width);
         super.setWidth(width);
+        super.setHeight(width);
         return this;
     }
 
     @Override
     public Rectangle setHeight(int height) {
         if (this.height != 0) {
-            return new Rectangle(width, height);
+            Rectangle newRect = new Rectangle();
+            newRect.setWidth(width);
+            newRect.setHeight(height);
+            return newRect;
         }
-        super.setHeight(height);
         super.setWidth(height);
+        super.setHeight(height);
         return this;
     }
 }
