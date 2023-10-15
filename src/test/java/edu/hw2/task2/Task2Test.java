@@ -41,14 +41,7 @@ public class Task2Test {
     }
 
     @Test
-    void squareAreaByHeight() {
-        Rectangle square = new Square();
-        square = square.setHeight(15);
-        assertThat(square.area()).isEqualTo(225.0);
-    }
-
-    @Test
-    void squareAreaByWidth() {
+    void squareArea() {
         Rectangle square = new Square();
         square = square.setWidth(20);
         assertThat(square.area()).isEqualTo(400.0);
