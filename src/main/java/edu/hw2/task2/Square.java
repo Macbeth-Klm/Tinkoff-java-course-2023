@@ -6,12 +6,12 @@ public class Square extends Rectangle {
     public Rectangle setWidth(int width) {
         if (this.width != 0) {
             Rectangle newRect = new Rectangle();
-            newRect.setWidth(width);
-            newRect.setHeight(height);
+            newRect = newRect.setWidth(width);
+            newRect = newRect.setHeight(height);
             return newRect;
         }
-        super.setWidth(width);
         super.setHeight(width);
+        super.setWidth(width);
         return this;
     }
 
@@ -19,12 +19,12 @@ public class Square extends Rectangle {
     public Rectangle setHeight(int height) {
         if (this.height != 0) {
             Rectangle newRect = new Rectangle();
-            newRect.setWidth(width);
-            newRect.setHeight(height);
+            newRect = newRect.setWidth(width);
+            newRect = newRect.setHeight(height);
             return newRect;
         }
-        super.setWidth(height);
         super.setHeight(height);
+        super.setWidth(height);
         return this;
     }
 }

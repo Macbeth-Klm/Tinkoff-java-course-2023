@@ -25,18 +25,42 @@ public class Task2Test {
     }
 
     @Test
-    void invalidWidthArgument() {
+    void invalidRectangleWidthSetterArgument() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Rectangle rect = new Square();
+            Rectangle rect = new Rectangle();
             rect = rect.setWidth(-10);
         });
     }
 
     @Test
-    void invalidHeightArgument() {
+    void invalidRectangleHeightSetterArgument() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Rectangle rect = new Rectangle();
             rect = rect.setHeight(-10);
         });
     }
+
+    @Test
+    void squareArea() {
+        Rectangle square = new Square();
+        square = square.setHeight(20);
+        assertThat(square.area()).isEqualTo(400.0);
+    }
+
+    @Test
+    void invalidSquareWidthSetterArgument() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Rectangle square = new Square();
+            square = square.setWidth(-10);
+        });
+    }
+
+    @Test
+    void invalidSquareHeightSetterArgument() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Rectangle square = new Square();
+            square = square.setHeight(-10);
+        });
+    }
+
 }
