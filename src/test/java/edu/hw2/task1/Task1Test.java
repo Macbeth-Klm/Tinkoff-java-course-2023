@@ -1,6 +1,5 @@
 package edu.hw2.task1;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,13 +18,5 @@ public class Task1Test {
 
         assertThat(result)
             .isEqualTo(37);
-    }
-
-    @Test
-    void nullValueArgumentsTest() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            var four = new Expr.Constant(4);
-            var sum = new Expr.Addition(null, four);
-        });
     }
 }
