@@ -32,7 +32,7 @@ public class Task2Test {
     }
 
     @Test
-    void invalidWidthSetterArgument() {
+    void invalidRectangleWidthSetterArgument() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Rectangle rect = new Rectangle();
             rect = rect.setWidth(-10);
@@ -40,10 +40,26 @@ public class Task2Test {
     }
 
     @Test
-    void invalidHeightSetterArgument() {
+    void invalidRectangleHeightSetterArgument() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Rectangle rect = new Rectangle();
             rect = rect.setHeight(-10);
+        });
+    }
+
+    @Test
+    void invalidSquareWidthSetterArgument() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Rectangle square = new Square();
+            square = square.setWidth(-10);
+        });
+    }
+
+    @Test
+    void invalidSquareHeightSetterArgument() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Rectangle square = new Square();
+            square = square.setHeight(-10);
         });
     }
 }
