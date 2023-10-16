@@ -13,9 +13,6 @@ public final class ConsoleHangman {
                 Phrases.printLose();
                 break;
             }
-            if (session.getPlayerAnswer().length() != 1) {
-                continue;
-            }
             if (session.getRealWord().equals(session.getAnswerStatus())) {
                 Phrases.printWin();
                 break;
