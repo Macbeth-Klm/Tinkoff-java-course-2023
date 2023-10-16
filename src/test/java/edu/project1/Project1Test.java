@@ -16,7 +16,7 @@ public class Project1Test {
     @Test
     void invalidStringLength() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            edu.project1.Session session = new edu.project1.Session(5, "indivisibility");
+            Session session = new edu.project1.Session(5, 2);
         });
     }
 
@@ -31,7 +31,7 @@ public class Project1Test {
             "l",
             "h"
         };
-        edu.project1.Session session = new edu.project1.Session(5, "hello");
+        Session session = new edu.project1.Session(5, 0);
         for (String answer : playerAnswers) {
             session.makeMove(answer);
         }
@@ -50,8 +50,8 @@ public class Project1Test {
     @Test
     void loseBecauseOfMistakes() {
         // given
-        edu.project1.Session session = new edu.project1.Session(5, "hello");
-        edu.project1.ConsoleHangman.run(session, "a");
+        Session session = new Session(5, 0);
+        ConsoleHangman.run(session, "a");
 
         // when
         String answerStatus = session.getAnswerStatus();
@@ -67,7 +67,7 @@ public class Project1Test {
     @Test
     void statusCheckFirst() {
         // given
-        edu.project1.Session session = new edu.project1.Session(5, "hello");
+        Session session = new Session(5, 0);
         session.makeMove("e");
 
         //when
@@ -84,7 +84,7 @@ public class Project1Test {
     @Test
     void statusCheckSecond() {
         // given
-        edu.project1.Session session = new edu.project1.Session(5, "hello");
+        Session session = new Session(5, 0);
         session.makeMove("a");
 
         //when
@@ -101,7 +101,7 @@ public class Project1Test {
     @Test
     void statusCheckThird() {
         // given
-        edu.project1.Session session = new edu.project1.Session(5, "hello");
+        Session session = new Session(5, 0);
         session.makeMove("hey");
 
         //when
@@ -118,8 +118,8 @@ public class Project1Test {
     @Test
     void surrenderCommandTest() {
         // given
-        edu.project1.Session session = new edu.project1.Session(5, "hello");
-        edu.project1.ConsoleHangman.run(session, "/gg");
+        Session session = new Session(5, 0);
+        ConsoleHangman.run(session, "/gg");
 
         //when
         String answerStatus = session.getAnswerStatus();

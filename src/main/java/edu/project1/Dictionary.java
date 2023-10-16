@@ -13,8 +13,8 @@ public final class Dictionary {
     private Dictionary() {
     }
 
-    public static String getRandomWord() {
-        int index = (int) (Math.random() * (WORDS.length - 1));
+    public static String getRandomWord(int index) {
+        //int index = (int) (Math.random() * (WORDS.length - 1));
         return WORDS[index];
     }
 }

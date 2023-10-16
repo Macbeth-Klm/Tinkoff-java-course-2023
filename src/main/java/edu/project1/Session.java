@@ -7,10 +7,9 @@ public class Session {
     private String answerStatus;
     private int attempts;
 
-    public Session(int maxAttempts) {
+    public Session(int maxAttempts, int wordIndex) {
         this.maxAttempts = maxAttempts;
-        realWord = Dictionary.getRandomWord(); // Для теста с некорректной длиной строки
-
+        realWord = Dictionary.getRandomWord(wordIndex);
         if (realWord.length() > this.maxAttempts) {
             throw new IllegalArgumentException("Загаданное слово некорректной длины!");
         }
@@ -18,18 +17,7 @@ public class Session {
         answerStatus = "*".repeat(realWord.length());
     }
 
-    public Session(int maxAttempts, String realString) {
-        this.maxAttempts = maxAttempts;
-        realWord = realString; // Для теста с некорректной длиной строки
-
-        if (realWord.length() > this.maxAttempts) {
-            throw new IllegalArgumentException("Заданное слово некорректной длины!");
-        }
-        attempts = 0;
-        answerStatus = "*".repeat(realWord.length());
-    }
-
-    private void updateAnswerStatus(String playerAnswer) {
+    private void updateAnswerStatus() {
         StringBuilder sb = new StringBuilder(answerStatus);
         char[] realWordArray = realWord.toCharArray();
         char playerAnswerChar = playerAnswer.toCharArray()[0]; // Массив состоит из 1 символа
@@ -40,6 +28,21 @@ public class Session {
             }
         }
         answerStatus = sb.toString();
+    }
+
+    public void makeMove(String answer) {
+        Phrases.printGuessTheLetterPhrase();
+        playerAnswer = Player.guessLetter(answer);
+        if (playerAnswer.length() == 1) {
+            if (realWord.contains(playerAnswer)) {
+                Phrases.printHit();
+                updateAnswerStatus();
+            } else {
+                attempts++;
+                Phrases.printMistakeMessage(attempts, maxAttempts);
+            }
+            Phrases.printTheWordMessage(answerStatus);
+        }
     }
 
     public int getMaxAttempts() {
@@ -60,35 +63,5 @@ public class Session {
 
     public String getPlayerAnswer() {
         return playerAnswer;
-    }
-
-    public void makeMove() {
-        Phrases.printGuessTheLetterPhrase();
-        playerAnswer = edu.project1.Player.guessLetter();
-        if (playerAnswer.length() == 1) {
-            if (realWord.contains(playerAnswer)) {
-                edu.project1.Phrases.printHit();
-                updateAnswerStatus(playerAnswer);
-            } else {
-                attempts++;
-                edu.project1.Phrases.printMistakeMessage(attempts, maxAttempts);
-            }
-            edu.project1.Phrases.printTheWordMessage(answerStatus);
-        }
-    }
-
-    public void makeMove(String playerAnswer) {
-        Phrases.printGuessTheLetterPhrase();
-        this.playerAnswer = playerAnswer;
-        if (this.playerAnswer.length() == 1) {
-            if (realWord.contains(this.playerAnswer)) {
-                edu.project1.Phrases.printHit();
-                updateAnswerStatus(this.playerAnswer);
-            } else {
-                attempts++;
-                edu.project1.Phrases.printMistakeMessage(attempts, maxAttempts);
-            }
-            edu.project1.Phrases.printTheWordMessage(answerStatus);
-        }
     }
 }
