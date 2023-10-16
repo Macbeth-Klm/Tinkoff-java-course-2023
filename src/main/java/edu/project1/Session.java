@@ -12,7 +12,7 @@ public class Session {
         realWord = Dictionary.getRandomWord(); // Для теста с некорректной длиной строки
 
         if (realWord.length() > this.maxAttempts) {
-            throw new IllegalArgumentException("Заданное слово некорректной длины!");
+            throw new IllegalArgumentException("Загаданное слово некорректной длины!");
         }
         attempts = 0;
         answerStatus = "*".repeat(realWord.length());
