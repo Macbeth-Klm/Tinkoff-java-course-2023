@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 public final class ConsoleHangman {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String COMMAND_SURRENDER = "/gg";
+    private static final String COMMAND_GIVE_UP = "/gg";
 
     private ConsoleHangman() {
     }
@@ -13,14 +13,16 @@ public final class ConsoleHangman {
     public static void run(Session session, String playerAnswer) {
         while (session.getAttempts() < session.getMaxAttempts()) {
             session.makeMove(playerAnswer);
-            if (session.getPlayerAnswer().equals(COMMAND_SURRENDER)
-                || session.getAttempts() == session.getMaxAttempts()) {
-                LOGGER.info("You lost!");
+            if (session.getPlayerAnswer().equals(COMMAND_GIVE_UP)) {
+                LOGGER.info("You gave up!");
                 break;
             }
             if (session.getRealWord().equals(session.getAnswerStatus())) {
                 LOGGER.info("You won!");
                 break;
+            }
+            if (session.getAttempts() == session.getMaxAttempts()) {
+                LOGGER.info("You lost!");
             }
         }
     }

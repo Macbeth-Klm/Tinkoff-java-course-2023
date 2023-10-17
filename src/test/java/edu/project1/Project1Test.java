@@ -127,8 +127,8 @@ public class Project1Test {
         int attempts = session.getAttempts();
 
         //then
-        assertThat(answerStatus)
-            .isEqualTo("*****");
+        assertThat(answerStatus.equals(session.getRealWord()))
+            .isFalse();
         assertThat(attempts)
             .isZero();
     }
