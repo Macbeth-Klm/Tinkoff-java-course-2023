@@ -7,7 +7,8 @@ public final class Dictionary {
         "indivisibility",
         "agree",
         "trust",
-        "index"
+        "index",
+        "I"
     };
 
     private Dictionary() {

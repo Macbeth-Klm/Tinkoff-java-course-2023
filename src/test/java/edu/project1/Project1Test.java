@@ -22,7 +22,7 @@ public class Project1Test {
     }
 
     @Test
-    void winCheck() {
+    void winCheckFirst() {
         // given
         String[] playerAnswers = new String[] {
             "a",
@@ -46,6 +46,23 @@ public class Project1Test {
             .isTrue();
         assertThat(attempts)
             .isEqualTo(2);
+    }
+
+    @Test
+    void winCheckSecond() {
+        //given
+        Session session = new Session(5, 6);
+        ConsoleHangman.run(session, "I");
+
+        // when
+        String answerStatus = session.getAnswerStatus();
+        int attempts = session.getAttempts();
+
+        // then
+        assertThat(answerStatus.equals(session.getRealWord()))
+            .isTrue();
+        assertThat(attempts)
+            .isEqualTo(0);
     }
 
     @Test
