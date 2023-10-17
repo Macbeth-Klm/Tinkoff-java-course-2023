@@ -13,7 +13,8 @@ public final class ConsoleHangman {
     public static void run(Session session, String playerAnswer) {
         while (session.getAttempts() < session.getMaxAttempts()) {
             session.makeMove(playerAnswer);
-            if (session.getPlayerAnswer().equals(COMMAND_SURRENDER)) {
+            if (session.getPlayerAnswer().equals(COMMAND_SURRENDER)
+                || session.getAttempts() == session.getMaxAttempts()) {
                 LOGGER.info("You lost!");
                 break;
             }
@@ -21,9 +22,6 @@ public final class ConsoleHangman {
                 LOGGER.info("You won!");
                 break;
             }
-        }
-        if (session.getAttempts() == session.getMaxAttempts()) {
-            LOGGER.info("You lost!");
         }
     }
 }

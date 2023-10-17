@@ -24,7 +24,7 @@ public class Session {
     private void updateAnswerStatus() {
         StringBuilder sb = new StringBuilder(answerStatus);
         char[] realWordArray = realWord.toCharArray();
-        char playerAnswerChar = playerAnswer.toCharArray()[0]; // Массив состоит из 1 символа
+        char playerAnswerChar = playerAnswer.toCharArray()[0];
         for (int i = 0; i < realWordArray.length; i++) {
             if (realWordArray[i] == playerAnswerChar) {
                 sb.deleteCharAt(i);

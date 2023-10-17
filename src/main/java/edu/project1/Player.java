@@ -6,8 +6,10 @@ public final class Player {
     }
 
     public static String guessLetter(String answer) {
-//        return SCANNER.nextLine();
-        //    private static final Scanner SCANNER = new Scanner(System.in);
+        /*
+        return SCANNER.nextLine();
+        private static final Scanner SCANNER = new Scanner(System.in);
+        */
         return answer;
     }
 }
