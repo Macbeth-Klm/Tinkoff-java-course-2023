@@ -1,6 +1,10 @@
 package edu.project1;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Session {
+    private static final Logger LOGGER = LogManager.getLogger();
     private final String realWord;
     private final int maxAttempts;
     private String playerAnswer;
@@ -31,17 +35,17 @@ public class Session {
     }
 
     public void makeMove(String answer) {
-        Phrases.printGuessTheLetterPhrase();
+        LOGGER.info("Guess a letter:");
         playerAnswer = Player.guessLetter(answer);
         if (playerAnswer.length() == 1) {
             if (realWord.contains(playerAnswer)) {
-                Phrases.printHit();
+                LOGGER.info("Hit!");
                 updateAnswerStatus();
             } else {
                 attempts++;
-                Phrases.printMistakeMessage(attempts, maxAttempts);
+                LOGGER.info("Missed, mistake " + attempts + " out of " + maxAttempts + ".");
             }
-            Phrases.printTheWordMessage(answerStatus);
+            LOGGER.info("The word: " + answerStatus);
         }
     }
 

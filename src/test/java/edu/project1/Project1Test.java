@@ -17,7 +17,7 @@ public class Project1Test {
     @Test
     void invalidStringLength() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Session session = new edu.project1.Session(5, 2);
+            Session session = new Session(5, 2);
         });
     }
 
@@ -32,7 +32,7 @@ public class Project1Test {
             "l",
             "h"
         };
-        Session session = new edu.project1.Session(5, 0);
+        Session session = new Session(5, 0);
         for (String answer : playerAnswers) {
             session.makeMove(answer);
         }

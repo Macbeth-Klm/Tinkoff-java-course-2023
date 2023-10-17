@@ -1,6 +1,10 @@
 package edu.project1;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public final class ConsoleHangman {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final String COMMAND_SURRENDER = "/gg";
 
     private ConsoleHangman() {
@@ -10,16 +14,16 @@ public final class ConsoleHangman {
         while (session.getAttempts() < session.getMaxAttempts()) {
             session.makeMove(playerAnswer);
             if (session.getPlayerAnswer().equals(COMMAND_SURRENDER)) {
-                Phrases.printLose();
+                LOGGER.info("You lost!");
                 break;
             }
             if (session.getRealWord().equals(session.getAnswerStatus())) {
-                Phrases.printWin();
+                LOGGER.info("You won!");
                 break;
             }
         }
         if (session.getAttempts() == session.getMaxAttempts()) {
-            Phrases.printLose();
+            LOGGER.info("You lost!");
         }
     }
 }
