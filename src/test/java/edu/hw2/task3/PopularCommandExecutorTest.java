@@ -1,50 +1,45 @@
 package edu.hw2.task3;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PopularCommandExecutorTest {
-    /*
-    Test1: DefaultConnectionManager(probability > 0.3) + StableConnection
-    Test2: DefaultConnectionManager(probability <= 0.3) + FaultyConnection(probability > 0.5) + success
-    Test3: DefaultConnectionManager(probability <= 0.3) + FaultyConnection(probability <= 0.5) + fail
-    Test4: FaultyConnectionManager + FaultyConnection(probability > 0.5) + success
-    Test5: FaultyConnectionManager + FaultyConnection(probability <= 0.5) + fail
-     */
-    @Test
-    void updatePackagesFirst() {
-        ConnectionManager defaultManager = new DefaultConnectionManager(0.31); //StableConnection
-        PopularCommandExecutor executor = new PopularCommandExecutor(defaultManager, 5);
-        assertDoesNotThrow(() -> executor.updatePackages(0.3));
+    static Arguments[] connectionManagers() {
+        /*
+        new Random(-9).nextInt(2): {0, 0, 1, 0, 0}
+        new Random(-15).nextInt(2): {0, 1, 0, 1, 1}
+         */
+        return new Arguments[] {
+            Arguments.of(new DefaultConnectionManager(new Random(-1), new Random(-9))),
+            Arguments.of(new FaultyConnectionManager(new Random(-15)))
+        };
+    }
+
+    @ParameterizedTest
+    @MethodSource("connectionManagers")
+    void checkingUpdatePackages(ConnectionManager manager) {
+        PopularCommandExecutor executor = new PopularCommandExecutor(manager, 3);
+        assertDoesNotThrow(executor::updatePackages);
     }
 
     @Test
-    void updatePackagesSecond() {
-        ConnectionManager defaultManager = new DefaultConnectionManager(0.29); //FaultyConnection
-        PopularCommandExecutor executor = new PopularCommandExecutor(defaultManager, 5);
-        assertDoesNotThrow(() -> executor.updatePackages(0.3));
+    void checkingSuccessTryExecute() {
+        // new Random(-10).nextInt(2): {0, 0, 0, 0, 1}
+        ConnectionManager connectionManager = new DefaultConnectionManager(new Random(-1), new Random(-10));
+        PopularCommandExecutor executor = new PopularCommandExecutor(connectionManager, 5);
+        assertDoesNotThrow(() -> executor.tryExecute("git init"));
     }
 
     @Test
-    void updatePackagesThird() {
-        ConnectionManager defaultManager = new DefaultConnectionManager(0.29); //FaultyConnection
-        PopularCommandExecutor executor = new PopularCommandExecutor(defaultManager, 2);
-        Assertions.assertThrows(ConnectionException.class, () -> executor.updatePackages(0.1));
-    }
-
-    @Test
-    void updatePackagesFourth() {
-        ConnectionManager faultyManager = new FaultyConnectionManager(); //FaultyConnection
-        PopularCommandExecutor executor = new PopularCommandExecutor(faultyManager, 2);
-        assertDoesNotThrow(() -> executor.updatePackages(0.45));
-    }
-
-    @Test
-    void updatePackagesFifth() {
-        ConnectionManager faultyManager = new FaultyConnectionManager(); //FaultyConnection
-        PopularCommandExecutor executor = new PopularCommandExecutor(faultyManager, 3);
-        Assertions.assertThrows(ConnectionException.class, () -> executor.updatePackages(0.15));
+    void checkingFailTryExecute() {
+        // new Random(-10).nextInt(2): {0, 0, 0, 0, 1}
+        ConnectionManager connectionManager = new FaultyConnectionManager(new Random(-10));
+        PopularCommandExecutor executor = new PopularCommandExecutor(connectionManager, 4);
+        assertThrows(ConnectionException.class, () -> executor.tryExecute("git init"));
     }
 }

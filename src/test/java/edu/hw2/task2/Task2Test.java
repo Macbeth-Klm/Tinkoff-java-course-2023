@@ -10,8 +10,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Task2Test {
     static Arguments[] rectangles() {
         return new Arguments[] {
-            Arguments.of(new Rectangle()),
-            Arguments.of(new Square())
+            Arguments.of(new Rectangle(8, 2)),
+            Arguments.of(new Square(4))
         };
     }
 
@@ -25,9 +25,16 @@ public class Task2Test {
     }
 
     @Test
+    void invalidRectangleConstructorArgument() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Rectangle rect = new Rectangle(-10, 5);
+        });
+    }
+
+    @Test
     void invalidRectangleWidthSetterArgument() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Rectangle rect = new Rectangle();
+            Rectangle rect = new Rectangle(30, 20);
             rect = rect.setWidth(-10);
         });
     }
@@ -35,47 +42,21 @@ public class Task2Test {
     @Test
     void invalidRectangleHeightSetterArgument() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Rectangle rect = new Rectangle();
+            Rectangle rect = new Rectangle(50, 40);
             rect = rect.setHeight(-10);
         });
     }
 
     @Test
-    void squareAreaByHeight() {
-        Rectangle square = new Square();
-        square = square.setHeight(15);
-        assertThat(square.area()).isEqualTo(225.0);
+    void squareAreaFirst() {
+        Rectangle square = new Square(20);
+        square = square.setWidth(15);
+        assertThat(square.area()).isEqualTo(300.0);
     }
 
     @Test
-    void squareAreaByWidth() {
-        Rectangle square = new Square();
-        square = square.setWidth(20);
-        assertThat(square.area()).isEqualTo(400.0);
+    void squareAreaSecond() {
+        Rectangle square = new Square(30);
+        assertThat(square.area()).isEqualTo(900.0);
     }
-
-    @Test
-    void squareToNewRectangle() {
-        Rectangle square = new Square();
-        square = square.setWidth(20);
-        square = square.setHeight(30);
-        assertThat(square.area()).isEqualTo(600.0);
-    }
-
-    @Test
-    void invalidSquareWidthSetterArgument() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Rectangle square = new Square();
-            square = square.setWidth(-10);
-        });
-    }
-
-    @Test
-    void invalidSquareHeightSetterArgument() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Rectangle square = new Square();
-            square = square.setHeight(-10);
-        });
-    }
-
 }

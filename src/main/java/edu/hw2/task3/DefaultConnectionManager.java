@@ -1,21 +1,27 @@
 package edu.hw2.task3;
 
+import java.util.Random;
+
 public class DefaultConnectionManager implements ConnectionManager {
-    private static final double FAULTY_PROBABILITY = 0.3;
+    private static final int RANDOM_BOUND = 2; // 0 - FaultyConnection; 1 - StableConnection
 
-    private final double managerProbability;
+    private final Random connectionManagerRandom;
+    private final Random connectionRandom;
 
-    public DefaultConnectionManager(double managerProbability) {
+    public DefaultConnectionManager() {
+        connectionManagerRandom = new Random();
+        connectionRandom = new Random();
+    }
 
-        this.managerProbability = managerProbability;
+    public DefaultConnectionManager(Random connectionManagerRandom, Random connectionRandom) {
+        this.connectionManagerRandom = connectionManagerRandom;
+        this.connectionRandom = connectionRandom;
     }
 
     @Override
     public Connection getConnection() {
-
-        if (managerProbability <= FAULTY_PROBABILITY) {
-            return new FaultyConnection();
-        }
-        return new StableConnection();
+        return (connectionManagerRandom.nextInt(RANDOM_BOUND) == 0)
+            ? new FaultyConnection(connectionRandom)
+            : new StableConnection();
     }
 }

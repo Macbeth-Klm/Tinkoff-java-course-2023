@@ -12,10 +12,10 @@ public sealed interface Expr {
         }
     }
 
-    record Negate(@NotNull Constant positiveValue) implements Expr {
+    record Negate(@NotNull Constant value) implements Expr {
         @Override
         public double evaluate() {
-            return positiveValue.evaluate() * (-1);
+            return value.evaluate() * (-1);
         }
     }
 
