@@ -11,22 +11,20 @@ public class Session {
     private String playerAnswer;
     private String answerStatus;
     private int attempts;
-    private final Random wordIndex;
 
-    public Session(int maxAttempts) {
-        this.maxAttempts = maxAttempts;
-        wordIndex = new Random();
-        realWord = Dictionary.getRandomWord(wordIndex);
-        if (realWord.length() > this.maxAttempts) {
-            throw new IllegalArgumentException();
-        }
-        attempts = 0;
-        answerStatus = "*".repeat(realWord.length());
-    }
+//    public Session(int maxAttempts) {
+//        this.maxAttempts = maxAttempts;
+//        wordIndex = new Random();
+//        realWord = Dictionary.getRandomWord(wordIndex);
+//        if (realWord.length() > this.maxAttempts) {
+//            throw new IllegalArgumentException();
+//        }
+//        attempts = 0;
+//        answerStatus = "*".repeat(realWord.length());
+//    }
 
     public Session(int maxAttempts, Random wordIndex) {
         this.maxAttempts = maxAttempts;
-        this.wordIndex = wordIndex;
         realWord = Dictionary.getRandomWord(wordIndex);
         if (realWord.length() > this.maxAttempts) {
             throw new IllegalArgumentException();
