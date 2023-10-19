@@ -1,5 +1,7 @@
 package edu.project1;
 
+import java.util.Random;
+
 public final class Dictionary {
     private static final String[] WORDS = new String[] {
         "hello",
@@ -14,8 +16,7 @@ public final class Dictionary {
     private Dictionary() {
     }
 
-    public static String getRandomWord(int index) {
-        //int index = (int) (Math.random() * (WORDS.length - 1));
-        return WORDS[index];
+    public static String getRandomWord(Random wordIndex) {
+        return WORDS[wordIndex.nextInt(WORDS.length)];
     }
 }

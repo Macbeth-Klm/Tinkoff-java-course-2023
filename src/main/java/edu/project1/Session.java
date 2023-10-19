@@ -1,5 +1,6 @@
 package edu.project1;
 
+import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,12 +11,25 @@ public class Session {
     private String playerAnswer;
     private String answerStatus;
     private int attempts;
+    private final Random wordIndex;
 
-    public Session(int maxAttempts, int wordIndex) {
+    public Session(int maxAttempts) {
         this.maxAttempts = maxAttempts;
+        wordIndex = new Random();
         realWord = Dictionary.getRandomWord(wordIndex);
         if (realWord.length() > this.maxAttempts) {
-            throw new IllegalArgumentException("Загаданное слово некорректной длины!");
+            throw new IllegalArgumentException();
+        }
+        attempts = 0;
+        answerStatus = "*".repeat(realWord.length());
+    }
+
+    public Session(int maxAttempts, Random wordIndex) {
+        this.maxAttempts = maxAttempts;
+        this.wordIndex = wordIndex;
+        realWord = Dictionary.getRandomWord(wordIndex);
+        if (realWord.length() > this.maxAttempts) {
+            throw new IllegalArgumentException();
         }
         attempts = 0;
         answerStatus = "*".repeat(realWord.length());
@@ -33,6 +47,21 @@ public class Session {
         }
         answerStatus = sb.toString();
     }
+
+//    public void makeMove() {
+//        LOGGER.info("Guess a letter:");
+//        playerAnswer = Player.guessLetter();
+//        if (playerAnswer.length() == 1) {
+//            if (realWord.contains(playerAnswer)) {
+//                LOGGER.info("Hit!");
+//                updateAnswerStatus();
+//            } else {
+//                attempts++;
+//                LOGGER.info("Missed, mistake " + attempts + " out of " + maxAttempts + ".");
+//            }
+//            LOGGER.info("The word: " + answerStatus);
+//        }
+//    }
 
     public void makeMove(String answer) {
         LOGGER.info("Guess a letter:");

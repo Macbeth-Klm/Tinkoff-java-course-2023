@@ -2,22 +2,16 @@ package edu.project1;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import java.util.Random;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Project1Test {
-    /*
-        Для тестирования был создан конструктор Session(int maxAttempts, int wordIndex),
-        так как метод Math.random() не подлежит тестированию.
-
-        Также В некоторых методах вы увидите закомментированный код. Так как консольный
-        ввод не покрыть тестами, мною было принято решение сделать переменные, которые
-        вводят через консоль, входными параметрами методов.
-    */
 
     @Test
     void invalidStringLength() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Session session = new Session(5, 2);
+            Random randomWord = new Random(-3); // randomWord.nextInt(-3) = 2 ("indivisibility")
+            Session session = new Session(5, randomWord);
         });
     }
 
@@ -32,7 +26,8 @@ public class Project1Test {
             "l",
             "h"
         };
-        Session session = new Session(5, 0);
+        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
+        Session session = new Session(5, randomWord);
         for (String answer : playerAnswers) {
             session.makeMove(answer);
         }
@@ -51,7 +46,8 @@ public class Project1Test {
     @Test
     void winCheckSecond() {
         //given
-        Session session = new Session(5, 6);
+        Random randomWord = new Random(18); // randomWord.nextInt(18) = 6 ("indivisibility")
+        Session session = new Session(5, randomWord);
         ConsoleHangman.run(session, "I");
 
         // when
@@ -68,7 +64,8 @@ public class Project1Test {
     @Test
     void loseBecauseOfMistakes() {
         // given
-        Session session = new Session(5, 0);
+        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
+        Session session = new Session(5, randomWord);
         ConsoleHangman.run(session, "a");
 
         // when
@@ -85,7 +82,8 @@ public class Project1Test {
     @Test
     void statusCheckFirst() {
         // given
-        Session session = new Session(5, 0);
+        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
+        Session session = new Session(5, randomWord);
         session.makeMove("e");
 
         //when
@@ -102,7 +100,8 @@ public class Project1Test {
     @Test
     void statusCheckSecond() {
         // given
-        Session session = new Session(5, 0);
+        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
+        Session session = new Session(5, randomWord);
         session.makeMove("a");
 
         //when
@@ -119,7 +118,8 @@ public class Project1Test {
     @Test
     void statusCheckThird() {
         // given
-        Session session = new Session(5, 0);
+        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
+        Session session = new Session(5, randomWord);
         session.makeMove("hey");
 
         //when
@@ -136,7 +136,8 @@ public class Project1Test {
     @Test
     void surrenderCommandTest() {
         // given
-        Session session = new Session(5, 0);
+        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
+        Session session = new Session(5, randomWord);
         ConsoleHangman.run(session, "/gg");
 
         //when
