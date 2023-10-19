@@ -8,11 +8,11 @@ public final class Player {
     private Player() {
     }
 
-    public static String guessLetter() {
+    public static String getAnswer() {
         return SCANNER.nextLine();
     }
 
-    public static String guessLetter(String answer) {
+    public static String getAnswer(String answer) {
         return answer;
     }
 }

@@ -45,7 +45,7 @@ public class Session {
 
     public void makeMove() {
         GameMessage.guessLetter();
-        playerAnswer = Player.guessLetter();
+        playerAnswer = Player.getAnswer();
         if (playerAnswer.length() == 1) {
             if (realWord.contains(playerAnswer)) {
                 GameMessage.hit();
@@ -60,7 +60,7 @@ public class Session {
 
     public void makeMove(String answer) {
         GameMessage.guessLetter();
-        playerAnswer = Player.guessLetter(answer);
+        playerAnswer = Player.getAnswer(answer);
         if (playerAnswer.length() == 1) {
             if (realWord.contains(playerAnswer)) {
                 GameMessage.hit();
