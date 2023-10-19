@@ -1,33 +1,30 @@
 package edu.project1;
 
 import java.util.Random;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class Session {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private final static String EXCEPTION_MESSAGE = "Слово некорректной длины!";
     private final String realWord;
     private final int maxAttempts;
     private String playerAnswer;
     private String answerStatus;
     private int attempts;
 
-//    public Session(int maxAttempts) {
-//        this.maxAttempts = maxAttempts;
-//        wordIndex = new Random();
-//        realWord = Dictionary.getRandomWord(wordIndex);
-//        if (realWord.length() > this.maxAttempts) {
-//            throw new IllegalArgumentException();
-//        }
-//        attempts = 0;
-//        answerStatus = "*".repeat(realWord.length());
-//    }
+    public Session(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
+        realWord = Dictionary.getRandomWord(new Random());
+        if (realWord.length() > this.maxAttempts) {
+            throw new IllegalArgumentException(EXCEPTION_MESSAGE);
+        }
+        attempts = 0;
+        answerStatus = "*".repeat(realWord.length());
+    }
 
     public Session(int maxAttempts, Random wordIndex) {
         this.maxAttempts = maxAttempts;
         realWord = Dictionary.getRandomWord(wordIndex);
         if (realWord.length() > this.maxAttempts) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(EXCEPTION_MESSAGE);
         }
         attempts = 0;
         answerStatus = "*".repeat(realWord.length());
@@ -46,33 +43,33 @@ public class Session {
         answerStatus = sb.toString();
     }
 
-//    public void makeMove() {
-//        LOGGER.info("Guess a letter:");
-//        playerAnswer = Player.guessLetter();
-//        if (playerAnswer.length() == 1) {
-//            if (realWord.contains(playerAnswer)) {
-//                LOGGER.info("Hit!");
-//                updateAnswerStatus();
-//            } else {
-//                attempts++;
-//                LOGGER.info("Missed, mistake " + attempts + " out of " + maxAttempts + ".");
-//            }
-//            LOGGER.info("The word: " + answerStatus);
-//        }
-//    }
-
-    public void makeMove(String answer) {
-        LOGGER.info("Guess a letter:");
-        playerAnswer = Player.guessLetter(answer);
+    public void makeMove() {
+        GameMessage.guessLetter();
+        playerAnswer = Player.guessLetter();
         if (playerAnswer.length() == 1) {
             if (realWord.contains(playerAnswer)) {
-                LOGGER.info("Hit!");
+                GameMessage.hit();
                 updateAnswerStatus();
             } else {
                 attempts++;
-                LOGGER.info("Missed, mistake " + attempts + " out of " + maxAttempts + ".");
+                GameMessage.mistake(attempts, maxAttempts);
             }
-            LOGGER.info("The word: " + answerStatus);
+            GameMessage.wordStatus(answerStatus);
+        }
+    }
+
+    public void makeMove(String answer) {
+        GameMessage.guessLetter();
+        playerAnswer = Player.guessLetter(answer);
+        if (playerAnswer.length() == 1) {
+            if (realWord.contains(playerAnswer)) {
+                GameMessage.hit();
+                updateAnswerStatus();
+            } else {
+                attempts++;
+                GameMessage.mistake(attempts, maxAttempts);
+            }
+            GameMessage.wordStatus(answerStatus);
         }
     }
 
