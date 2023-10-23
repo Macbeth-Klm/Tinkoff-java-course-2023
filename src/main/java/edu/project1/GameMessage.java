@@ -9,6 +9,10 @@ public final class GameMessage {
     private GameMessage() {
     }
 
+    public static void introduction(int maxAttempts) {
+        LOGGER.info("Welcome to the Hangman! You have " + maxAttempts + " attempts to guess the word. Let's begin!");
+    }
+
     public static void lose() {
         LOGGER.info("You lost!");
     }
@@ -27,6 +31,10 @@ public final class GameMessage {
 
     public static void hit() {
         LOGGER.info("Hit!");
+    }
+
+    public static void incorrectAnswerFormat() {
+        LOGGER.info("The answer is not in the correct format! Enter only one letter.");
     }
 
     public static void mistake(int attempts, int maxAttempts) {

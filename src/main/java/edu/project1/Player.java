@@ -3,16 +3,11 @@ package edu.project1;
 import java.util.Scanner;
 
 public final class Player {
-    private static final Scanner SCANNER = new Scanner(System.in);
 
     private Player() {
     }
 
-    public static String getAnswer() {
-        return SCANNER.nextLine();
-    }
-
-    public static String getAnswer(String answer) {
-        return answer;
+    public static String getAnswer(Scanner scanner) {
+        return scanner.nextLine();
     }
 }

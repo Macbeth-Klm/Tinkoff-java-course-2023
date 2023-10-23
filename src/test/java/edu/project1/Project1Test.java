@@ -1,114 +1,83 @@
 package edu.project1;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import java.io.ByteArrayInputStream;
 import java.util.Random;
+import java.util.Scanner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Project1Test {
 
-    @Test
-    void invalidStringLength() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Random randomWord = new Random(-3); // randomWord.nextInt(-3) = 2 ("indivisibility")
-            Session session = new Session(5, randomWord);
-        });
-    }
+    static String answers = """
+        a
+        b
+        e
+        o
+        l
+        h
+        """;
 
     @Test
-    void winCheckFirst() {
-        // given
-        String[] playerAnswers = new String[] {
-            "a",
-            "b",
-            "e",
-            "o",
-            "l",
-            "h"
-        };
-        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
-        Session session = new Session(5, randomWord);
-        for (String answer : playerAnswers) {
-            session.makeMove(answer);
-        }
+    void shouldWinWithTwoAttempts() {
+        Scanner scanner = new Scanner(new ByteArrayInputStream(answers.getBytes()));
+        Random wordIndex = new Random(-10); // realWord = "hello"
+        ConsoleHangman consoleHangman = new ConsoleHangman(scanner, wordIndex);
 
-        // when
-        String answerStatus = session.getAnswerStatus();
-        int attempts = session.getAttempts();
+        consoleHangman.run();
+        String answerStatus = consoleHangman.getSession().getAnswerStatus();
+        int attempts = consoleHangman.getSession().getAttempts();
 
-        // then
-        assertThat(answerStatus.equals(session.getRealWord()))
+        assertThat(answerStatus.equals(consoleHangman.getSession().getRealWord()))
             .isTrue();
         assertThat(attempts)
             .isEqualTo(2);
+        assertThat(consoleHangman.getSession().getMaxAttempts())
+            .isEqualTo(4);
     }
 
-    @Test
-    void winCheckSecond() {
-        //given
-        Random randomWord = new Random(18); // randomWord.nextInt(18) = 6 ("indivisibility")
-        Session session = new Session(5, randomWord);
-        ConsoleHangman.run(session, "I");
+    @Test void shouldLoseDueToOverAttempts() {
+        Scanner scanner = new Scanner(new ByteArrayInputStream(answers.getBytes()));
+        Random wordIndex = new Random(-5); // realWord = "index"
+        ConsoleHangman consoleHangman = new ConsoleHangman(scanner, wordIndex);
 
-        // when
-        String answerStatus = session.getAnswerStatus();
-        int attempts = session.getAttempts();
+        consoleHangman.run();
+        String answerStatus = consoleHangman.getSession().getAnswerStatus();
+        int attempts = consoleHangman.getSession().getAttempts();
 
-        // then
-        assertThat(answerStatus.equals(session.getRealWord()))
-            .isTrue();
-        assertThat(attempts)
-            .isEqualTo(0);
-    }
-
-    @Test
-    void loseBecauseOfMistakes() {
-        // given
-        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
-        Session session = new Session(5, randomWord);
-        ConsoleHangman.run(session, "a");
-
-        // when
-        String answerStatus = session.getAnswerStatus();
-        int attempts = session.getAttempts();
-
-        // then
-        assertThat(answerStatus.equals(session.getRealWord()))
+        assertThat(answerStatus.equals(consoleHangman.getSession().getRealWord()))
             .isFalse();
         assertThat(attempts)
+            .isEqualTo(consoleHangman.getSession().getMaxAttempts());
+        assertThat(consoleHangman.getSession().getMaxAttempts())
             .isEqualTo(5);
     }
 
     @Test
-    void statusCheckFirst() {
-        // given
-        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
-        Session session = new Session(5, randomWord);
-        session.makeMove("e");
+    void checkingStatusWhenGuessing() {
+        Random randomWord = new Random(-3); // realWord = "indivisibility"
+        Scanner scanner = new Scanner(new ByteArrayInputStream("y".getBytes()));
+        Session session = new Session(scanner, randomWord);
+        session.makeMove();
 
-        //when
         String answerStatus = session.getAnswerStatus();
         int attempts = session.getAttempts();
 
-        //then
         assertThat(answerStatus)
-            .isEqualTo("*e***");
+            .isEqualTo("*************y");
         assertThat(attempts)
             .isZero();
     }
 
     @Test
-    void statusCheckSecond() {
-        // given
-        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
-        Session session = new Session(5, randomWord);
-        session.makeMove("a");
+    void checkingStatusWhenMistake() {
+        Random randomWord = new Random(1); // realWord = "trust"
+        Scanner scanner = new Scanner(new ByteArrayInputStream("a".getBytes()));
+        Session session = new Session(scanner, randomWord);
+        session.makeMove();
 
-        //when
         String answerStatus = session.getAnswerStatus();
         int attempts = session.getAttempts();
 
-        //then
         assertThat(answerStatus)
             .isEqualTo("*****");
         assertThat(attempts)
@@ -116,17 +85,15 @@ public class Project1Test {
     }
 
     @Test
-    void statusCheckThird() {
-        // given
-        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
-        Session session = new Session(5, randomWord);
-        session.makeMove("hey");
+    void checkingStatusWhenIncorrectAnswerIsEntered() {
+        Random randomWord = new Random(-10); // realWord = "hello"
+        Scanner scanner = new Scanner(new ByteArrayInputStream("ajdskl".getBytes()));
+        Session session = new Session(scanner, randomWord);
+        session.makeMove();
 
-        //when
         String answerStatus = session.getAnswerStatus();
         int attempts = session.getAttempts();
 
-        //then
         assertThat(answerStatus)
             .isEqualTo("*****");
         assertThat(attempts)
@@ -134,18 +101,17 @@ public class Project1Test {
     }
 
     @Test
-    void surrenderCommandTest() {
-        // given
-        Random randomWord = new Random(-10); // randomWord.nextInt(-10) = 0 ("hello")
-        Session session = new Session(5, randomWord);
-        ConsoleHangman.run(session, "/gg");
+    void checkingStatusWhenSurrenderCommandIsEntered() {
+        Random randomWord = new Random(-10); // realWord = "hello"
+        Scanner scanner = new Scanner(new ByteArrayInputStream("/gg".getBytes()));
+        ConsoleHangman consoleHangman = new ConsoleHangman(scanner, randomWord);
 
-        //when
-        String answerStatus = session.getAnswerStatus();
-        int attempts = session.getAttempts();
+        consoleHangman.run();
+        String answerStatus = consoleHangman.getSession().getAnswerStatus();
+        int attempts = consoleHangman.getSession().getAttempts();
 
         //then
-        assertThat(answerStatus.equals(session.getRealWord()))
+        assertThat(answerStatus.equals(consoleHangman.getSession().getRealWord()))
             .isFalse();
         assertThat(attempts)
             .isZero();

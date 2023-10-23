@@ -1,33 +1,36 @@
 package edu.project1;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Session {
-    private final static String EXCEPTION_MESSAGE = "Слово некорректной длины!";
+    private static final String COMMAND_GIVE_UP = "/gg";
+    private final Scanner scanner;
     private final String realWord;
     private final int maxAttempts;
     private String playerAnswer;
     private String answerStatus;
     private int attempts;
 
-    public Session(int maxAttempts) {
-        this.maxAttempts = maxAttempts;
-        realWord = Dictionary.getRandomWord(new Random());
-        if (realWord.length() > this.maxAttempts) {
-            throw new IllegalArgumentException(EXCEPTION_MESSAGE);
-        }
+    public Session(Scanner scanner, Random wordIndex) {
+        this.scanner = scanner;
+        realWord = Dictionary.getRandomWord(wordIndex);
+        maxAttempts = getUniqueCharCount(realWord);
         attempts = 0;
         answerStatus = "*".repeat(realWord.length());
     }
 
-    public Session(int maxAttempts, Random wordIndex) {
-        this.maxAttempts = maxAttempts;
-        realWord = Dictionary.getRandomWord(wordIndex);
-        if (realWord.length() > this.maxAttempts) {
-            throw new IllegalArgumentException(EXCEPTION_MESSAGE);
+    private int getUniqueCharCount(String realWord) {
+        char[] realWordCharArray = realWord.toCharArray();
+        List<Character> uniqueCharList = new ArrayList<>();
+        for (char letter : realWordCharArray) {
+            if (!uniqueCharList.contains(letter)) {
+                uniqueCharList.add(letter);
+            }
         }
-        attempts = 0;
-        answerStatus = "*".repeat(realWord.length());
+        return uniqueCharList.size();
     }
 
     private void updateAnswerStatus() {
@@ -36,8 +39,7 @@ public class Session {
         char playerAnswerChar = playerAnswer.toCharArray()[0];
         for (int i = 0; i < realWordArray.length; i++) {
             if (realWordArray[i] == playerAnswerChar) {
-                sb.deleteCharAt(i);
-                sb.insert(i, playerAnswerChar);
+                sb.replace(i, i + 1, playerAnswer);
             }
         }
         answerStatus = sb.toString();
@@ -45,7 +47,7 @@ public class Session {
 
     public void makeMove() {
         GameMessage.guessLetter();
-        playerAnswer = Player.getAnswer();
+        playerAnswer = Player.getAnswer(scanner);
         if (playerAnswer.length() == 1) {
             if (realWord.contains(playerAnswer)) {
                 GameMessage.hit();
@@ -55,21 +57,8 @@ public class Session {
                 GameMessage.mistake(attempts, maxAttempts);
             }
             GameMessage.wordStatus(answerStatus);
-        }
-    }
-
-    public void makeMove(String answer) {
-        GameMessage.guessLetter();
-        playerAnswer = Player.getAnswer(answer);
-        if (playerAnswer.length() == 1) {
-            if (realWord.contains(playerAnswer)) {
-                GameMessage.hit();
-                updateAnswerStatus();
-            } else {
-                attempts++;
-                GameMessage.mistake(attempts, maxAttempts);
-            }
-            GameMessage.wordStatus(answerStatus);
+        } else if (!playerAnswer.equals(COMMAND_GIVE_UP)) {
+            GameMessage.incorrectAnswerFormat();
         }
     }
 

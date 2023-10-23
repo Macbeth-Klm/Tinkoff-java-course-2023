@@ -1,13 +1,19 @@
 package edu.project1;
 
-public final class ConsoleHangman {
-    private static final String COMMAND_GIVE_UP = "/gg";
+import java.util.Random;
+import java.util.Scanner;
+import org.jetbrains.annotations.NotNull;
 
-    private ConsoleHangman() {
+public class ConsoleHangman {
+    private static final String COMMAND_GIVE_UP = "/gg";
+    private final Session session;
+
+    public ConsoleHangman(Scanner scanner, Random wordIndex) {
+        session = new Session(scanner, wordIndex);
     }
 
-    public static void run(int maxAttempts) {
-        Session session = new Session(maxAttempts);
+    public void run() {
+        GameMessage.introduction(session.getMaxAttempts());
         while (session.getAttempts() < session.getMaxAttempts()) {
             session.makeMove();
             if (session.getPlayerAnswer().equals(COMMAND_GIVE_UP)) {
@@ -24,20 +30,8 @@ public final class ConsoleHangman {
         }
     }
 
-    public static void run(Session session, String playerAnswer) {
-        while (session.getAttempts() < session.getMaxAttempts()) {
-            session.makeMove(playerAnswer);
-            if (session.getPlayerAnswer().equals(COMMAND_GIVE_UP)) {
-                GameMessage.giveUp();
-                break;
-            }
-            if (session.getRealWord().equals(session.getAnswerStatus())) {
-                GameMessage.win();
-                break;
-            }
-            if (session.getAttempts() == session.getMaxAttempts()) {
-                GameMessage.lose();
-            }
-        }
+    @NotNull
+    public Session getSession() {
+        return session;
     }
 }
