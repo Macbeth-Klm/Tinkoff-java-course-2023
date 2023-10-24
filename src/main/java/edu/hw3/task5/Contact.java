@@ -5,7 +5,7 @@ public class Contact {
     private final String secondName;
 
     public Contact(String fullName) {
-        String[] names = fullName.split("\s");
+        String[] names = fullName.split(" ");
         switch (names.length) {
             case 1:
                 firstName = names[0];
@@ -26,5 +26,9 @@ public class Contact {
 
     public String getSecondName() {
         return secondName;
+    }
+
+    public String getFullName() {
+        return (secondName.isEmpty()) ? firstName : firstName + " " + secondName;
     }
 }

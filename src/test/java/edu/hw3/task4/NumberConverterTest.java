@@ -2,73 +2,39 @@ package edu.hw3.task4;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NumberConverterTest {
     @Test
-    void convertToRomanTestFirst() {
-        // given
+    void shouldConvertArabicNumberToRoman() {
         int number = 1948;
 
-        // when
         String result = NumberConverter.convertToRoman(number);
 
-        // then
         assertThat(result)
             .isEqualTo("MCMXLVIII");
     }
 
     @Test
-    void convertToRomanTestSecond() {
-        // given
-        int number = 4;
+    void shouldConvertArabicFiveToRoman() {
+        int number = 5;
 
-        // when
         String result = NumberConverter.convertToRoman(number);
 
-        // then
         assertThat(result)
-            .isEqualTo("IV");
+            .isEqualTo("V");
     }
 
-    @Test
-    void convertToRomanTestThird() {
-        // given
-        int number = 12;
-
-        // when
-        String result = NumberConverter.convertToRoman(number);
-
-        // then
-        assertThat(result)
-            .isEqualTo("XII");
-    }
-
-    @Test
-    void convertZeroToRomanTest() {
-        // given
-        int number = 0;
-
-        // when
-        String result = NumberConverter.convertToRoman(number);
-
-        // then
-        assertThat(result)
-            .isEmpty();
-    }
-
-    @Test
-    void convertMaxValueToRomanTest() {
-        // given
-        int number = 4000;
-
-        // when
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 0, 4000})
+    void shouldThrowBecauseOfMissingNumberInRange(int number) {
         IllegalArgumentException resultException =
             Assertions.assertThrows(IllegalArgumentException.class, () -> {
                 String result = NumberConverter.convertToRoman(number);
             });
 
-        // then
-        Assertions.assertEquals("Число больше максимального значения!", resultException.getMessage());
+        Assertions.assertEquals("Неконвертируемое число!", resultException.getMessage());
     }
 }

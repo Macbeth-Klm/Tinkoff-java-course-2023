@@ -10,7 +10,7 @@ public final class WordCounter {
 
     public static <T> Map<T, Integer> freqDict(List<T> inputList) {
         if (inputList == null || inputList.isEmpty()) {
-            throw new NullPointerException("Список пустой!");
+            throw new IllegalArgumentException("Список пустой!");
         }
         Map<T, Integer> result = new HashMap<>();
         for (T el : inputList) {

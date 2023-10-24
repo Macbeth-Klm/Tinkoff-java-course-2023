@@ -1,13 +1,14 @@
 package edu.hw3.task6;
 
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
-public class StockMarketPlace implements StockMarket {
-    private PriorityQueue<Stock> priorityQueueStock;
+public class DefaultStockMarket implements StockMarket {
+    private final PriorityQueue<Stock> priorityQueueStock;
 
-    public StockMarketPlace() {
-        /**Акции расположены в порядке убывания цены*/
-        priorityQueueStock = new PriorityQueue<>((o1, o2) -> (-1) * Integer.compare(o1.price(), o2.price()));
+    /** Акции расположены в порядке убывания цены */
+    public DefaultStockMarket() {
+        priorityQueueStock = new PriorityQueue<>(Comparator.comparingInt(Stock::getPrice).reversed());
     }
 
     @Override
