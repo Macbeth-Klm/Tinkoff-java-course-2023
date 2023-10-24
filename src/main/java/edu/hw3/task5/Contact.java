@@ -5,6 +5,9 @@ public class Contact {
     private final String secondName;
 
     public Contact(String fullName) {
+        if (fullName == null || fullName.isEmpty()) {
+            throw new IllegalArgumentException("Строка пустая!");
+        }
         String[] names = fullName.split(" ");
         switch (names.length) {
             case 1:
@@ -16,7 +19,7 @@ public class Contact {
                 secondName = names[1];
                 break;
             default:
-                throw new IllegalArgumentException("Неверная строка!");
+                throw new IllegalArgumentException("Строка некорректного формата!");
         }
     }
 

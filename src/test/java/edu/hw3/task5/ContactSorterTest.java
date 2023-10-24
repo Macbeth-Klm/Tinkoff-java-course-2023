@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -115,5 +116,25 @@ public class ContactSorterTest {
 
         assertThat(sortedContacts)
             .isEmpty();
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = "")
+    void shouldThrowExceptionBecauseOfFullNameIsEmpty(String fullname) {
+        IllegalArgumentException emptyFullNameException =
+            Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                Contact contact = new Contact(fullname);
+            });
+        Assertions.assertEquals("Строка пустая!", emptyFullNameException.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionBecauseOfIncorrectNameFormat() {
+        IllegalArgumentException incorrectNameFormatException =
+            Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                Contact contact = new Contact("Ryan Thomas Gosling");
+            });
+        Assertions.assertEquals("Строка некорректного формата!", incorrectNameFormatException.getMessage());
     }
 }

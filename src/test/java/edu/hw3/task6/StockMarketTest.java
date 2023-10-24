@@ -1,10 +1,23 @@
 package edu.hw3.task6;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import java.util.PriorityQueue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StockMarketTest {
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, -100})
+    void shouldThrowExceptionBecauseOfIncorrectStockPrice(int price) {
+        IllegalArgumentException incorrectPriceException =
+            Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                Stock stock = new Stock(price);
+            });
+        Assertions.assertEquals("Цена акции некорректная!", incorrectPriceException.getMessage());
+    }
 
     @Test
     void shouldAddStockInStockMarket() {
@@ -65,4 +78,14 @@ public class StockMarketTest {
             .isEqualTo(stock2);
     }
 
+    @Test
+    void shouldThrowExceptionBecauseOfEmptyQueue() {
+        DefaultStockMarket defaultStockMarket = new DefaultStockMarket();
+
+        NullPointerException emptyQueueException =
+            Assertions.assertThrows(NullPointerException.class, () -> {
+                Stock mostValuableStock = defaultStockMarket.mostValuableStock();
+            });
+        Assertions.assertEquals("Акций на данный момент нет!", emptyQueueException.getMessage());
+    }
 }
