@@ -2,6 +2,8 @@ package edu.project1;
 
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,12 +55,12 @@ public class Project1Test {
     }
 
     @Test
-    void checkingStatusWhenGuessing() {
+    void shouldCorrectChangeStatusWhenGuessing() {
         Random randomWord = new Random(-3); // realWord = "indivisibility"
         Scanner scanner = new Scanner(new ByteArrayInputStream("y".getBytes()));
         Session session = new Session(scanner, randomWord);
-        session.makeMove();
 
+        session.makeMove(new ArrayList<>());
         String answerStatus = session.getAnswerStatus();
         int attempts = session.getAttempts();
 
@@ -69,11 +71,11 @@ public class Project1Test {
     }
 
     @Test
-    void checkingStatusWhenMistake() {
+    void shouldCorrectChangeStatusWhenMistake() {
         Random randomWord = new Random(1); // realWord = "trust"
         Scanner scanner = new Scanner(new ByteArrayInputStream("a".getBytes()));
         Session session = new Session(scanner, randomWord);
-        session.makeMove();
+        session.makeMove(new ArrayList<>());
 
         String answerStatus = session.getAnswerStatus();
         int attempts = session.getAttempts();
@@ -85,12 +87,12 @@ public class Project1Test {
     }
 
     @Test
-    void checkingStatusWhenIncorrectAnswerIsEntered() {
+    void shouldNotChangeStatusWhenIncorrectAnswerIsEntered() {
         Random randomWord = new Random(-10); // realWord = "hello"
         Scanner scanner = new Scanner(new ByteArrayInputStream("ajdskl".getBytes()));
         Session session = new Session(scanner, randomWord);
-        session.makeMove();
 
+        session.makeMove(new ArrayList<>());
         String answerStatus = session.getAnswerStatus();
         int attempts = session.getAttempts();
 
@@ -98,6 +100,30 @@ public class Project1Test {
             .isEqualTo("*****");
         assertThat(attempts)
             .isZero();
+    }
+
+    @Test
+    void shouldNotChangeStatusWhenLetterWhichHaveBeenEnteredBeforeIsEntered() {
+        String newAnswers = """
+            a
+            a
+            """;
+        Random randomWord = new Random(-10); // realWord = "hello"
+        Scanner scanner = new Scanner(new ByteArrayInputStream(newAnswers.getBytes()));
+        Session session = new Session(scanner, randomWord);
+        List<String> answerHistory = new ArrayList<>();
+
+        session.makeMove(answerHistory);
+        session.makeMove(answerHistory);
+        String answerStatus = session.getAnswerStatus();
+        int attempts = session.getAttempts();
+
+        assertThat(answerStatus)
+            .isEqualTo("*****");
+        assertThat(attempts)
+            .isOne();
+        assertThat(answerHistory)
+            .containsExactly("a");
     }
 
     @Test

@@ -1,9 +1,10 @@
 package edu.project1;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Session {
     private static final String COMMAND_GIVE_UP = "/gg";
@@ -17,44 +18,45 @@ public class Session {
     public Session(Scanner scanner, Random wordIndex) {
         this.scanner = scanner;
         realWord = Dictionary.getRandomWord(wordIndex);
-        maxAttempts = getUniqueCharCount(realWord);
+        maxAttempts = getUniqueCharCount();
         attempts = 0;
         answerStatus = "*".repeat(realWord.length());
     }
 
-    private int getUniqueCharCount(String realWord) {
-        char[] realWordCharArray = realWord.toCharArray();
-        List<Character> uniqueCharList = new ArrayList<>();
-        for (char letter : realWordCharArray) {
-            if (!uniqueCharList.contains(letter)) {
-                uniqueCharList.add(letter);
-            }
+    private int getUniqueCharCount() {
+        Set<Character> uniqueCharSet = new HashSet<>();
+        for (char letter : realWord.toCharArray()) {
+            uniqueCharSet.add(letter);
         }
-        return uniqueCharList.size();
+        return uniqueCharSet.size();
     }
 
-    private void updateAnswerStatus() {
+    private void updateAnswerStatus(char playerAnswerLetter) {
         StringBuilder sb = new StringBuilder(answerStatus);
         char[] realWordArray = realWord.toCharArray();
-        char playerAnswerChar = playerAnswer.toCharArray()[0];
         for (int i = 0; i < realWordArray.length; i++) {
-            if (realWordArray[i] == playerAnswerChar) {
-                sb.replace(i, i + 1, playerAnswer);
+            if (realWordArray[i] == playerAnswerLetter) {
+                sb.setCharAt(i, playerAnswerLetter);
             }
         }
         answerStatus = sb.toString();
     }
 
-    public void makeMove() {
+    public void makeMove(List<String> answerHistory) {
         GameMessage.guessLetter();
         playerAnswer = Player.getAnswer(scanner);
         if (playerAnswer.length() == 1) {
-            if (realWord.contains(playerAnswer)) {
-                GameMessage.hit();
-                updateAnswerStatus();
+            if (answerHistory.contains(playerAnswer)) {
+                GameMessage.sameAnswer();
             } else {
-                attempts++;
-                GameMessage.mistake(attempts, maxAttempts);
+                answerHistory.add(playerAnswer);
+                if (realWord.contains(playerAnswer)) {
+                    GameMessage.hit();
+                    updateAnswerStatus(playerAnswer.toCharArray()[0]);
+                } else {
+                    attempts++;
+                    GameMessage.mistake(attempts, maxAttempts);
+                }
             }
             GameMessage.wordStatus(answerStatus);
         } else if (!playerAnswer.equals(COMMAND_GIVE_UP)) {

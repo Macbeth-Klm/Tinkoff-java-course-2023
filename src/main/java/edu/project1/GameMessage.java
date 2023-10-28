@@ -9,20 +9,22 @@ public final class GameMessage {
     private GameMessage() {
     }
 
-    public static void introduction(int maxAttempts) {
-        LOGGER.info("Welcome to the Hangman! You have " + maxAttempts + " attempts to guess the word. Let's begin!");
+    public static void introduction(int maxAttempts, String realWord) {
+        LOGGER.info("Welcome to the Hangman!\nYou have " + maxAttempts + " attempts to guess the word. "
+            + "If you wish to surrender, you can enter the command \"/gg\". "
+            + "Let's begin! The word: " + realWord + "\n");
     }
 
-    public static void lose() {
-        LOGGER.info("You lost!");
+    public static void lose(String realWord) {
+        LOGGER.info("You lost! The real word: " + realWord);
     }
 
     public static void win() {
         LOGGER.info("You won!");
     }
 
-    public static void giveUp() {
-        LOGGER.info("You gave up!");
+    public static void giveUp(String realWord) {
+        LOGGER.info("You gave up! The real word: " + realWord);
     }
 
     public static void guessLetter() {
@@ -31,6 +33,10 @@ public final class GameMessage {
 
     public static void hit() {
         LOGGER.info("Hit!");
+    }
+
+    public static void sameAnswer() {
+        LOGGER.info("You've entered this answer before. Enter another letter.");
     }
 
     public static void incorrectAnswerFormat() {
