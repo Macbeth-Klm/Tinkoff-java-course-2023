@@ -6,19 +6,11 @@ import java.util.Map;
 public final class NumberConverter {
     private static final Map<Integer, String> ARABIC_TO_ROMAN_CORRESPONDENCE = new LinkedHashMap<>();
     private static final int MAX_VALUE = 3999;
-    private static final int ONE_THOUSAND = 1000;
-    private static final int FIVE_HUNDRED = 500;
-    private static final int ONE_HUNDRED = 100;
-    private static final int FIFTY = 50;
-    private static final int TEN = 10;
-    private static final int NINE = 9;
-    private static final int FIVE = 5;
-    private static final int FOUR = 4;
-    private static final int ONE = 1;
 
     private NumberConverter() {
     }
 
+    @SuppressWarnings("MagicNumber")
     public static String convertToRoman(int inputNumber) {
         if (inputNumber > MAX_VALUE || inputNumber < 1) {
             throw new IllegalArgumentException("Неконвертируемое число!");
@@ -28,17 +20,17 @@ public final class NumberConverter {
         StringBuilder sb = new StringBuilder();
         int ratio = inputNumber;
         for (int i = 0; i < keys.length; i += 2) {
-            int remainder = ratio % TEN;
+            int remainder = ratio % 10;
             if (remainder > 0) {
-                if (remainder == NINE) {
+                if (remainder == 9) {
                     sb.append(ARABIC_TO_ROMAN_CORRESPONDENCE.get(keys[i + 2]));
                     sb.append(ARABIC_TO_ROMAN_CORRESPONDENCE.get(keys[i]));
-                } else if (remainder > FOUR) {
-                    for (int j = 0; j < (remainder - FIVE); j++) {
+                } else if (remainder > 4) {
+                    for (int j = 0; j < (remainder - 5); j++) {
                         sb.append(ARABIC_TO_ROMAN_CORRESPONDENCE.get(keys[i]));
                     }
                     sb.append(ARABIC_TO_ROMAN_CORRESPONDENCE.get(keys[i + 1]));
-                } else if (remainder == FOUR) {
+                } else if (remainder == 4) {
                     sb.append(ARABIC_TO_ROMAN_CORRESPONDENCE.get(keys[i + 1]));
                     sb.append(ARABIC_TO_ROMAN_CORRESPONDENCE.get(keys[i]));
                 } else {
@@ -47,18 +39,19 @@ public final class NumberConverter {
                     }
                 }
             }
-            ratio /= TEN;
+            ratio /= 10;
         }
         return sb.reverse().toString();
     }
 
+    @SuppressWarnings("MagicNumber")
     private static void fillMap() {
-        ARABIC_TO_ROMAN_CORRESPONDENCE.put(ONE, "I");
-        ARABIC_TO_ROMAN_CORRESPONDENCE.put(FIVE, "V");
-        ARABIC_TO_ROMAN_CORRESPONDENCE.put(TEN, "X");
-        ARABIC_TO_ROMAN_CORRESPONDENCE.put(FIFTY, "L");
-        ARABIC_TO_ROMAN_CORRESPONDENCE.put(ONE_HUNDRED, "C");
-        ARABIC_TO_ROMAN_CORRESPONDENCE.put(FIVE_HUNDRED, "D");
-        ARABIC_TO_ROMAN_CORRESPONDENCE.put(ONE_THOUSAND, "M");
+        ARABIC_TO_ROMAN_CORRESPONDENCE.put(1, "I");
+        ARABIC_TO_ROMAN_CORRESPONDENCE.put(5, "V");
+        ARABIC_TO_ROMAN_CORRESPONDENCE.put(10, "X");
+        ARABIC_TO_ROMAN_CORRESPONDENCE.put(50, "L");
+        ARABIC_TO_ROMAN_CORRESPONDENCE.put(100, "C");
+        ARABIC_TO_ROMAN_CORRESPONDENCE.put(500, "D");
+        ARABIC_TO_ROMAN_CORRESPONDENCE.put(1000, "M");
     }
 }
