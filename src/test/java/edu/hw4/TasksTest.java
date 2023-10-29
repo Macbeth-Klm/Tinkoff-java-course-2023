@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -220,5 +221,95 @@ public class TasksTest {
                 SPIDER_JOHN,
                 spiderSirJo
             );
+    }
+
+    @Test
+    void shouldReturnTrueIfSpiderBitesFreqExceedDogBitesFreq() {
+        // given
+        List<Animal> firstList = new ArrayList<>(ANIMALS); // spiderFreq = 3/4, dogFreq = 2/3
+        Animal spiderSirJo = new Animal("Sir Jo", SPIDER, M, 1, 2, 2, true);
+        Animal spiderLola = new Animal("Lola", SPIDER, F, 1, 2, 2, false);
+        Animal spiderMila = new Animal("Mila", SPIDER, F, 1, 2, 2, true);
+        Collections.addAll(firstList, spiderSirJo, spiderLola, spiderMila);
+
+        List<Animal> secondList = new ArrayList<>(ANIMALS); // spiderFreq = 1/2, dogFreq = 2/3
+        Animal spiderKen = new Animal("Ken", SPIDER, M, 1, 2, 2, false);
+        secondList.add(spiderKen);
+
+        List<Animal> thirdList = new ArrayList<>(); // spidersCount == 0 || dogsCount == 0
+        Collections.addAll(thirdList, BIRD_MIKE, CAT_MURKA, CAT_TOSHIBO, DOG_JEEMBO, DOG_BOBIK, DOG_SPIKE);
+
+        // when
+        var trueResult = Tasks.task17(firstList);
+        var falseResult = Tasks.task17(secondList);
+        var unknownResult = Tasks.task17(thirdList);
+
+        // then
+        assertThat(trueResult)
+            .isTrue();
+        assertThat(falseResult)
+            .isFalse();
+        assertThat(unknownResult)
+            .isFalse();
+    }
+
+    @Test
+    void shouldReturnTheHeaviestFishFromTwoMoreLists() {
+        // given
+        List<Animal> list1 = new ArrayList<>(ANIMALS); // FISH_LEILA.weight() == 5
+        List<Animal> list2 = new ArrayList<>();
+        Animal fishMartin = new Animal("Spike", FISH, M, 1, 2, 6, true);
+        list2.add(fishMartin);
+
+        List<Animal> list3 = new ArrayList<>();
+        Animal spiderMila = new Animal("Mila", SPIDER, F, 1, 2, 2, true);
+        list3.add(spiderMila);
+        List<Animal> list4 = new ArrayList<>();
+        Animal dogBob = new Animal("Bob", DOG, M, 10, 50, 7, true);
+        list4.add(dogBob);
+        List<Animal> list5 = new ArrayList<>();
+
+        // when
+        var result1 = Tasks.task18(list1, list2);
+        var result2 = Tasks.task18(list3, list4, list5);
+
+        // then
+        assertThat(result1)
+            .isEqualTo(fishMartin);
+        assertThat(result2)
+            .isNull();
+    }
+
+    @Test
+    void shouldReturnMapWithNamesAndValidatationErrorsSetOfAnimalsWithValidationErrors() {
+        List<Animal> list = new ArrayList<>(ANIMALS);
+        Animal spider = new Animal("Sir de Natrius dush Oktopus Junior", SPIDER, F, 1, 2, 2, true);
+        list.add(spider);
+
+        Map<String, Set<ValidationError>> result = Tasks.task19(list);
+
+        assertThat(result)
+            .containsOnlyKeys("Sir de Natrius dush Oktopus Junior");
+        assertThat(result.get("Sir de Natrius dush Oktopus Junior").size())
+            .isOne();
+        assertThat(result.get("Sir de Natrius dush Oktopus Junior").stream()
+            .toList().getFirst().getError())
+            .isEqualTo("The name contains an unacceptable number of words!");
+    }
+
+    @Test
+    void shouldReturnMapWithNamesAndAttributeNamesOfAnimalsWithValidationErrors() {
+        List<Animal> list = new ArrayList<>(ANIMALS);
+        Animal spiderKek = new Animal("Kek", SPIDER, F, -2, 1000, 50, true);
+        Animal dogGolden = new Animal("Golden", DOG, M, 100, 30, 7, true);
+        Collections.addAll(list, spiderKek, dogGolden);
+
+        Map<String, String> result = Tasks.task20(list);
+
+        assertThat(result)
+            .containsExactlyInAnyOrderEntriesOf(Map.of(
+                "Kek", "age, height, weight",
+                "Golden", "age"
+            ));
     }
 }

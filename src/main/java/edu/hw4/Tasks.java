@@ -1,14 +1,18 @@
 package edu.hw4;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
-import static edu.hw4.Animal.Type.*;
+import static edu.hw4.Animal.Type.DOG;
+import static edu.hw4.Animal.Type.FISH;
+import static edu.hw4.Animal.Type.SPIDER;
 
 public final class Tasks {
     private Tasks() {
@@ -77,6 +81,7 @@ public final class Tasks {
             .toList();
     }
 
+    @SuppressWarnings("MagicNumber")
     public static List<Animal> task11(List<Animal> animals) {
         return animals.stream()
             .filter(a -> a.bites() && a.height() > 100)
@@ -118,10 +123,72 @@ public final class Tasks {
     }
 
     public static Boolean task17(List<Animal> animals) {
-        return animals.stream()
-            .filter(a -> a.type() == DOG || a.type() == SPIDER)
-            .collect(Collectors.toMap(Animal::type, a -> {
-                List<Integer> bitesToCount = new ArrayList<>();
-            }));
+        var bitesSpiders = animals.stream()
+            .filter(a -> a.type() == SPIDER && a.bites())
+            .count();
+        var spidersCount = animals.stream()
+            .filter(a -> a.type() == SPIDER)
+            .count();
+        var bitesDogs = animals.stream()
+            .filter(a -> a.type() == DOG && a.bites())
+            .count();
+        var dogsCount = animals.stream()
+            .filter(a -> a.type() == DOG)
+            .count();
+        return spidersCount != 0 && dogsCount != 0
+            && (double) bitesSpiders / spidersCount > (double) bitesDogs / dogsCount;
     }
+
+    @SafeVarargs
+    public static Animal task18(List<Animal>... animals) {
+        return Arrays.stream(animals)
+            .map(l -> l.stream()
+                .filter(a -> a.type() == FISH)
+                .max(Comparator.comparingInt(Animal::weight)).orElse(null))
+            .filter(Objects::nonNull)
+            .max(Comparator.comparingInt(Animal::weight)).orElse(null);
+    }
+
+    public static Map<String, Set<ValidationError>> task19(List<Animal> animals) {
+
+        return animals.stream()
+            .collect(Collectors.toMap(Animal::name, a -> {
+                Set<ValidationError> errors = new HashSet<>();
+                Collections.addAll(
+                    errors,
+                    ValidationError.invalidName(a),
+                    ValidationError.invalidAge(a),
+                    ValidationError.invalidHeight(a),
+                    ValidationError.invalidWeight(a)
+                );
+                return errors.stream().filter(Objects::nonNull).collect(Collectors.toSet());
+            })).entrySet().stream().filter(s -> !s.getValue().isEmpty())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+    }
+
+    public static Map<String, String> task20(List<Animal> animals) {
+        return animals.stream()
+            .collect(Collectors.toMap(Animal::name, a -> {
+                StringBuilder sb = new StringBuilder();
+                if (ValidationError.invalidName(a) != null) {
+                    sb.append("name, ");
+                }
+                if (ValidationError.invalidAge(a) != null) {
+                    sb.append("age, ");
+                }
+                if (ValidationError.invalidHeight(a) != null) {
+                    sb.append("height, ");
+                }
+                if (ValidationError.invalidWeight(a) != null) {
+                    sb.append("weight, ");
+                }
+                if (!sb.isEmpty()) {
+                    sb.delete(sb.length() - 2, sb.length());
+                }
+                return sb.toString();
+            })).entrySet().stream().filter(s -> !s.getValue().isEmpty())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
 }
