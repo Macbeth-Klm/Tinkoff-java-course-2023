@@ -150,7 +150,6 @@ public final class Tasks {
     }
 
     public static Map<String, Set<ValidationError>> task19(List<Animal> animals) {
-
         return animals.stream()
             .collect(Collectors.toMap(Animal::name, a -> {
                 Set<ValidationError> errors = new HashSet<>();
@@ -164,7 +163,6 @@ public final class Tasks {
                 return errors.stream().filter(Objects::nonNull).collect(Collectors.toSet());
             })).entrySet().stream().filter(s -> !s.getValue().isEmpty())
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
     }
 
     public static Map<String, String> task20(List<Animal> animals) {
