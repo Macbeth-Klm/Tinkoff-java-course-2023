@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BackwardIteratorTest {
@@ -30,8 +31,8 @@ class BackwardIteratorTest {
         BackwardIterator<String, List<String>> backwardIterator = new BackwardIterator<>(list);
         backwardIterator.next();
 
-        ArrayIndexOutOfBoundsException elementDoesNotExistException =
-            Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, backwardIterator::next);
+        NoSuchElementException elementDoesNotExistException =
+            Assertions.assertThrows(NoSuchElementException.class, backwardIterator::next);
 
         Assertions.assertEquals("Достигнуто начало коллекции!", elementDoesNotExistException.getMessage());
     }

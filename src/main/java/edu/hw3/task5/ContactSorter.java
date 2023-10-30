@@ -1,8 +1,8 @@
 package edu.hw3.task5;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import org.jetbrains.annotations.NotNull;
 
 public final class ContactSorter {
@@ -13,43 +13,22 @@ public final class ContactSorter {
         if (names == null || names.isEmpty()) {
             return new Contact[0];
         }
-        Set<Contact> sortedContacts = switch (sortingMethod) {
-            case "ASC" -> new TreeSet<>((o1, o2) -> {
-                if (o1.getSecondName().isEmpty()) {
-                    if (o2.getSecondName().isEmpty()) {
-                        return CharSequence.compare(o1.getFirstName(), o2.getFirstName());
-                    } else {
-                        return CharSequence.compare(o1.getFirstName(), o2.getSecondName());
-                    }
-                } else {
-                    if (o2.getSecondName().isEmpty()) {
-                        return CharSequence.compare(o1.getSecondName(), o2.getFirstName());
-                    } else {
-                        return CharSequence.compare(o1.getSecondName(), o2.getSecondName());
-                    }
-                }
-            });
-            case "DESC" -> new TreeSet<>((o1, o2) -> {
-                if (o1.getSecondName().isEmpty()) {
-                    if (o2.getSecondName().isEmpty()) {
-                        return (-1) * CharSequence.compare(o1.getFirstName(), o2.getFirstName());
-                    } else {
-                        return (-1) * CharSequence.compare(o1.getFirstName(), o2.getSecondName());
-                    }
-                } else {
-                    if (o2.getSecondName().isEmpty()) {
-                        return (-1) * CharSequence.compare(o1.getSecondName(), o2.getFirstName());
-                    } else {
-                        return (-1) * CharSequence.compare(o1.getSecondName(), o2.getSecondName());
-                    }
-                }
-            });
-            default -> throw new IllegalArgumentException("Неправильно задан метод сортировки!");
-        };
-        for (String name : names) {
-            Contact contact = new Contact(name);
-            sortedContacts.add(contact);
+        var isAsc = sortingMethod.equals("ASC");
+        if (isAsc || sortingMethod.equals("DESC")) {
+            Contact[] sortedContacts = new Contact[names.size()];
+            for (int i = 0; i < sortedContacts.length; i++) {
+                sortedContacts[i] = new Contact(names.get(i));
+            }
+            if (isAsc) {
+                Arrays.sort(sortedContacts, Comparator
+                    .comparing(c1 -> c1.getSecondName() + c1.getFirstName()));
+            } else {
+                Arrays.sort(sortedContacts, Comparator
+                    .comparing((Contact c1) -> c1.getSecondName() + c1.getFirstName()).reversed());
+            }
+            return sortedContacts;
+        } else {
+            throw new IllegalArgumentException("Неправильно задан метод сортировки!");
         }
-        return sortedContacts.toArray(new Contact[0]);
     }
 }

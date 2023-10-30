@@ -2,6 +2,7 @@ package edu.hw3.task8;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class BackwardIterator<E, T extends List<E>> implements Iterator<E> {
     /*
@@ -26,7 +27,7 @@ public class BackwardIterator<E, T extends List<E>> implements Iterator<E> {
     @Override
     public E next() {
         if (!hasNext()) {
-            throw new ArrayIndexOutOfBoundsException("Достигнуто начало коллекции!");
+            throw new NoSuchElementException("Достигнуто начало коллекции!");
         }
         currentIndex--;
         return elements.get(currentIndex);

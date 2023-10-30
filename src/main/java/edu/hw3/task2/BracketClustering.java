@@ -13,7 +13,8 @@ public final class BracketClustering {
         }
         char[] inputToChars = inputString.toCharArray();
         List<String> result = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
+        // При capacity > (Integer.MAX_VALUE - 2) появляется OutOfMemoryError
+        StringBuilder sb = new StringBuilder(Integer.MAX_VALUE - 2);
         int bracketsCount = 0;
         for (char el : inputToChars) {
             switch (el) {

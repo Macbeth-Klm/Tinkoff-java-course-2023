@@ -14,11 +14,7 @@ public final class WordCounter {
         }
         Map<T, Integer> result = new HashMap<>();
         for (T el : inputList) {
-            int count = 1;
-            if (result.containsKey(el)) {
-                count += result.get(el);
-            }
-            result.put(el, count);
+            result.merge(el, 1, Integer::sum);
         }
         return result;
     }
