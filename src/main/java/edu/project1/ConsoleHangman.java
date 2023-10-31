@@ -15,7 +15,8 @@ public class ConsoleHangman {
     }
 
     public void run() {
-        GameMessage.introduction(session.getMaxAttempts(), session.getAnswerStatus());
+        GameMessage.introduction(session.getMaxAttempts());
+        GameMessage.wordStatus(session.getAnswerStatus());
         List<String> answerHistory = new ArrayList<>();
         var realWord = session.getRealWord();
         while (session.getAttempts() < session.getMaxAttempts()) {

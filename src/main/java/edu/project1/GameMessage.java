@@ -9,10 +9,9 @@ public final class GameMessage {
     private GameMessage() {
     }
 
-    public static void introduction(int maxAttempts, String realWord) {
+    public static void introduction(int maxAttempts) {
         LOGGER.info("Welcome to the Hangman!\nYou have " + maxAttempts + " attempts to guess the word. "
-            + "If you wish to surrender, you can enter the command \"/gg\". "
-            + "Let's begin! The word: " + realWord + "\n");
+            + "If you wish to surrender, you can enter the command \"/gg\". Let's begin!");
     }
 
     public static void lose(String realWord) {
