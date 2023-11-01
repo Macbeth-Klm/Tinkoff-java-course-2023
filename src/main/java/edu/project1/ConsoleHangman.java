@@ -1,7 +1,5 @@
 package edu.project1;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +15,9 @@ public class ConsoleHangman {
     public void run() {
         GameMessage.introduction(session.getMaxAttempts());
         GameMessage.wordStatus(session.getAnswerStatus());
-        List<String> answerHistory = new ArrayList<>();
         var realWord = session.getRealWord();
         while (session.getAttempts() < session.getMaxAttempts()) {
-            session.makeMove(answerHistory);
+            session.makeMove();
             var giveUp = session.getPlayerAnswer().equals(COMMAND_GIVE_UP);
             if (giveUp || session.getAnswerStatus().equals(realWord)) {
                 if (giveUp) {

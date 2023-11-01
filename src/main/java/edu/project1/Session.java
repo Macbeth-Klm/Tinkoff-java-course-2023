@@ -1,7 +1,6 @@
 package edu.project1;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -11,6 +10,7 @@ public class Session {
     private final Scanner scanner;
     private final String realWord;
     private final int maxAttempts;
+    private final Set<Character> answerHistory;
     private String playerAnswer;
     private String answerStatus;
     private int attempts;
@@ -19,8 +19,9 @@ public class Session {
         this.scanner = scanner;
         realWord = Dictionary.getRandomWord(wordIndex);
         maxAttempts = getUniqueCharCount();
-        attempts = 0;
+        answerHistory = new HashSet<>();
         answerStatus = "*".repeat(realWord.length());
+        attempts = 0;
     }
 
     private int getUniqueCharCount() {
@@ -42,21 +43,21 @@ public class Session {
         answerStatus = sb.toString();
     }
 
-    public void makeMove(List<String> answerHistory) {
+    public void makeMove() {
         GameMessage.guessLetter();
         playerAnswer = Player.getAnswer(scanner);
         if (playerAnswer.length() == 1) {
-            if (answerHistory.contains(playerAnswer)) {
-                GameMessage.sameAnswer();
-            } else {
-                answerHistory.add(playerAnswer);
-                if (realWord.contains(playerAnswer)) {
+            char playerAnswerLetter = playerAnswer.charAt(0);
+            if (answerHistory.add(playerAnswerLetter)) {
+                if (realWord.indexOf(playerAnswerLetter) > -1) {
                     GameMessage.hit();
-                    updateAnswerStatus(playerAnswer.toCharArray()[0]);
+                    updateAnswerStatus(playerAnswerLetter);
                 } else {
                     attempts++;
                     GameMessage.mistake(attempts, maxAttempts);
                 }
+            } else {
+                GameMessage.sameAnswer();
             }
             GameMessage.wordStatus(answerStatus);
         } else if (!playerAnswer.equals(COMMAND_GIVE_UP)) {
@@ -82,5 +83,9 @@ public class Session {
 
     public String getPlayerAnswer() {
         return playerAnswer;
+    }
+
+    public Set<Character> getAnswerHistory() {
+        return answerHistory;
     }
 }
