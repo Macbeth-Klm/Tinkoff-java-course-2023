@@ -5,12 +5,13 @@ import java.util.Random;
 
 public final class EllerAlgorithm implements Generator {
 
-    private final Random doesAddWall = new Random();
+    private final Random doesAddWall;
     private int[][] intGrid;
     private Cell[][] cells;
     private int counter;
 
-    public EllerAlgorithm() {
+    public EllerAlgorithm(Random doesAddWall) {
+        this.doesAddWall = doesAddWall;
         counter = 0;
     }
 
