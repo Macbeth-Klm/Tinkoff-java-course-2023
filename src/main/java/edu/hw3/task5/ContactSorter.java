@@ -21,10 +21,10 @@ public final class ContactSorter {
             }
             if (isAsc) {
                 Arrays.sort(sortedContacts, Comparator
-                    .comparing(c1 -> c1.getSecondName() + c1.getFirstName()));
+                    .comparing(Contact::getSecondName).thenComparing(Contact::getFirstName));
             } else {
                 Arrays.sort(sortedContacts, Comparator
-                    .comparing((Contact c1) -> c1.getSecondName() + c1.getFirstName()).reversed());
+                    .comparing(Contact::getSecondName).thenComparing(Contact::getFirstName).reversed());
             }
             return sortedContacts;
         } else {
