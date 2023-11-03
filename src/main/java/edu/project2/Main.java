@@ -2,6 +2,8 @@ package edu.project2;
 
 import edu.project2.generation.EllerAlgorithm;
 import edu.project2.generation.Generator;
+import edu.project2.rendering.PrettyPrint;
+import edu.project2.rendering.Renderer;
 import edu.project2.solution.LeeWaveAlgorithm;
 import java.util.List;
 import java.util.Random;
@@ -28,9 +30,9 @@ public class Main {
         int width = scanner.nextInt();
 
         Generator generator = new EllerAlgorithm(random);
+        Renderer renderer = new PrettyPrint();
         Maze maze = generator.generate(height, width);
-        PrettyPrint prettyPrint = new PrettyPrint();
-        LOGGER.info(prettyPrint.render(maze));
+        LOGGER.info(renderer.render(maze));
 
         LOGGER.info("Введите строку начальной точки: ");
         int row = scanner.nextInt();
@@ -46,7 +48,7 @@ public class Main {
 
         LeeWaveAlgorithm leeWaveAlgorithm = new LeeWaveAlgorithm();
         List<Cell> solution = leeWaveAlgorithm.solve(maze, rootCell, goalCell);
-        LOGGER.info(prettyPrint.render(maze, solution));
+        LOGGER.info(renderer.render(maze, solution));
 
     }
 }
