@@ -1,5 +1,7 @@
 package edu.project2.generation;
 
+import edu.project2.Cell;
+import edu.project2.Maze;
 import java.util.Arrays;
 import java.util.Random;
 
