@@ -2,65 +2,71 @@ package edu.project2;
 
 import java.util.List;
 
-@SuppressWarnings({"RegexpSinglelineJava", "MagicNumber"})
-public final class PrettyPrint {
+@SuppressWarnings("MagicNumber")
+public class PrettyPrint implements Renderer {
     /*
      * "\u001B[31m" - Красный цвет текста
      * "\u001B[0m" - ANSI reset
      */
     private static final String DOWN_WALL = "▃▃▃▃▃";
-    private static final String SOLUTION_STEP = "\u001B[31m" + "●" + "\u001B[0m";
+    private static final String SOLUTION_STEP = "\u001B[31m" + "●" + "\u001B[32m";
     private static final char RIGHT_WALL = '█';
 
-    private PrettyPrint() {
+    public PrettyPrint() {
     }
 
-    public static void printMaze(Maze maze) {
+    @Override
+    public String render(Maze maze) {
         var grid = maze.grid();
-        System.out.println(DOWN_WALL.repeat(maze.width()));
-        StringBuilder sb = new StringBuilder(5); // Cell = 5 символов
+        StringBuilder renderedMaze = new StringBuilder((maze.height() + 2) * (maze.width() * 5) + 1);
+        renderedMaze.append("\n").append(DOWN_WALL.repeat(maze.width())).append("\n");
+        StringBuilder renderedCell = new StringBuilder(5);
         for (int i = 0; i < maze.height(); i++) {
             for (int j = 0; j < maze.width(); j++) {
-                sb.append(" ".repeat(5));
+                renderedCell.append(" ".repeat(5));
                 if (grid[i][j].isDownWall()) {
-                    sb.replace(0, sb.length(), DOWN_WALL);
+                    renderedCell.replace(0, renderedCell.length(), DOWN_WALL);
                 }
                 if (grid[i][j].isRightWall()) {
-                    sb.setCharAt(4, RIGHT_WALL);
+                    renderedCell.setCharAt(4, RIGHT_WALL);
                 }
                 if (j == 0) {
-                    sb.setCharAt(0, RIGHT_WALL);
+                    renderedCell.setCharAt(0, RIGHT_WALL);
                 }
-                System.out.print(sb);
-                sb.delete(0, sb.length());
+                renderedMaze.append(renderedCell);
+                renderedCell.delete(0, renderedCell.length());
             }
-            System.out.println();
+            renderedMaze.append("\n");
         }
+        return renderedMaze.toString();
     }
 
-    public static void printSolution(Maze maze, List<Cell> solution) {
+    @Override
+    public String render(Maze maze, List<Cell> path) {
         var grid = maze.grid();
-        System.out.println(DOWN_WALL.repeat(maze.width()));
-        StringBuilder sb = new StringBuilder(5); // 5 символов может находиться в одном Cell
+        StringBuilder renderedMaze = new StringBuilder((maze.height() + 2) * (maze.width() * 5) + 1);
+        renderedMaze.append("\n").append(DOWN_WALL.repeat(maze.width())).append("\n");
+        StringBuilder renderedCell = new StringBuilder(5);
         for (int i = 0; i < maze.height(); i++) {
             for (int j = 0; j < maze.width(); j++) {
-                sb.append(" ".repeat(5));
+                renderedCell.append(" ".repeat(5));
                 if (grid[i][j].isDownWall()) {
-                    sb.replace(0, sb.length(), DOWN_WALL);
+                    renderedCell.replace(0, renderedCell.length(), DOWN_WALL);
                 }
                 if (grid[i][j].isRightWall()) {
-                    sb.setCharAt(4, RIGHT_WALL);
+                    renderedCell.setCharAt(4, RIGHT_WALL);
                 }
                 if (j == 0) {
-                    sb.setCharAt(0, RIGHT_WALL);
+                    renderedCell.setCharAt(0, RIGHT_WALL);
                 }
-                if (solution.contains(grid[i][j])) {
-                    sb.replace(2, 3, SOLUTION_STEP);
+                if (path.contains(grid[i][j])) {
+                    renderedCell.replace(2, 3, SOLUTION_STEP);
                 }
-                System.out.print(sb);
-                sb.delete(0, sb.length());
+                renderedMaze.append(renderedCell);
+                renderedCell.delete(0, renderedCell.length());
             }
-            System.out.println();
+            renderedMaze.append("\n");
         }
+        return renderedMaze.toString();
     }
 }
