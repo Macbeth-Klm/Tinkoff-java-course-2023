@@ -16,7 +16,7 @@ public class BinaryTreeAlgorithm implements Generator {
     @Override
     public Maze generate(int height, int width) {
         initMazeGrid(height, width);
-        for (int i = 0; i < height; i ++) {
+        for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (i == 0 && j != width - 1) {
                     cells[i][j].setRightWall(false);
