@@ -11,19 +11,17 @@ import java.util.Scanner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MazeExplorerTest {
-
-    static String initialConditions = """
-        4
-        5
-        2
-        1
-        1
-        2
-        5
-        """;
-
     @Test
     void shouldReturnCorrectPathWithLeeWaveAlgorithm() {
+        String initialConditions = """
+            4
+            5
+            2
+            1
+            1
+            2
+            5
+            """;
         Scanner scanner = new Scanner(new ByteArrayInputStream(initialConditions.getBytes()));
         MazeExplorer mazeExplorer = new MazeExplorer(scanner, new Random(10));
         mazeExplorer.run();
@@ -42,6 +40,36 @@ class MazeExplorerTest {
                 mazeExplorer.getMaze().getCell(3, 4),
                 mazeExplorer.getMaze().getCell(2, 4),
                 mazeExplorer.getMaze().getCell(1, 4)
+            );
+    }
+
+    @Test
+    void shouldReturnCorrectPathWithBinaryTreeAlgorithm() {
+        String initialConditions = """
+            4
+            5
+            1
+            1
+            1
+            4
+            1
+            """;
+        Scanner scanner = new Scanner(new ByteArrayInputStream(initialConditions.getBytes()));
+        MazeExplorer mazeExplorer = new MazeExplorer(scanner, new Random(10));
+        mazeExplorer.run();
+
+        List<Cell> path = mazeExplorer.getPath();
+
+        assertThat(path)
+            .containsExactly(
+                mazeExplorer.getMaze().getCell(0, 0),
+                mazeExplorer.getMaze().getCell(0, 1),
+                mazeExplorer.getMaze().getCell(0, 2),
+                mazeExplorer.getMaze().getCell(1, 2),
+                mazeExplorer.getMaze().getCell(2, 2),
+                mazeExplorer.getMaze().getCell(2, 1),
+                mazeExplorer.getMaze().getCell(3, 1),
+                mazeExplorer.getMaze().getCell(3, 0)
             );
     }
 
