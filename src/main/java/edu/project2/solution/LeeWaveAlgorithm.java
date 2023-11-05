@@ -11,13 +11,13 @@ public class LeeWaveAlgorithm implements Solver {
     private final Queue<Cell> queue = new ArrayDeque<>();
 
     @Override
-    public List<Cell> solve(Maze maze, Cell rootCell, Cell goalCell) {
-        queue.add(rootCell);
+    public List<Cell> solve(Maze maze, Cell start, Cell end) {
+        queue.add(start);
         int[][] dist = new int[maze.height()][maze.width()];
         boolean[][] visited = new boolean[maze.height()][maze.width()];
         while (!queue.isEmpty()) {
             Cell currentCell = queue.remove();
-            if (currentCell == goalCell) {
+            if (currentCell == end) {
                 break;
             }
             List<Cell> nextCells = nextEnableCells(maze, currentCell.getRow(), currentCell.getCol());
@@ -32,8 +32,8 @@ public class LeeWaveAlgorithm implements Solver {
             visited[currentCell.getRow()][currentCell.getCol()] = true;
         }
         List<Cell> path = new ArrayList<>();
-        Cell curCell = goalCell;
-        while (curCell != rootCell) {
+        Cell curCell = end;
+        while (curCell != start) {
             path.add(curCell);
             List<Cell> nextCells = nextEnableCells(maze, curCell.getRow(), curCell.getCol());
             for (Cell cell : nextCells) {
@@ -43,7 +43,7 @@ public class LeeWaveAlgorithm implements Solver {
                 }
             }
         }
-        path.add(rootCell);
+        path.add(start);
         return path.reversed();
     }
 

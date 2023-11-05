@@ -15,6 +15,7 @@ class MazeExplorerTest {
     static String initialConditions = """
         4
         5
+        2
         1
         1
         2
@@ -22,7 +23,7 @@ class MazeExplorerTest {
         """;
 
     @Test
-    void shouldReturnCorrectPath() {
+    void shouldReturnCorrectPathWithLeeWaveAlgorithm() {
         Scanner scanner = new Scanner(new ByteArrayInputStream(initialConditions.getBytes()));
         MazeExplorer mazeExplorer = new MazeExplorer(scanner, new Random(10));
         mazeExplorer.run();
@@ -67,6 +68,7 @@ class MazeExplorerTest {
     @ValueSource(strings = {"""
         4
         5
+        2
         1
         1
         2
@@ -74,6 +76,7 @@ class MazeExplorerTest {
         """, """
         4
         5
+        2
         1
         -1
         2
@@ -87,5 +90,22 @@ class MazeExplorerTest {
             Assertions.assertThrows(IllegalArgumentException.class, mazeExplorer::run);
 
         Assertions.assertEquals("Элемента с такими координатами не существует!", invalidCell.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionBecauseOfIncrorrectGenerateMethod() {
+        String initialConditions = """
+            4
+            5
+            10
+            """;
+        Scanner scanner = new Scanner(new ByteArrayInputStream(initialConditions.getBytes()));
+
+        IllegalArgumentException invalidGenerateMethod =
+            Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                MazeExplorer mazeExplorer = new MazeExplorer(scanner, new Random(10));
+            });
+
+        Assertions.assertEquals("Неверно задан метод генерации!", invalidGenerateMethod.getMessage());
     }
 }

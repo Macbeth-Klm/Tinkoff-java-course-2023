@@ -5,7 +5,7 @@ import edu.project2.Maze;
 import java.util.Arrays;
 import java.util.Random;
 
-public final class EllerAlgorithm implements Generator {
+public class EllerAlgorithm implements Generator {
 
     private final Random doesAddWall;
     private int[][] intGrid;

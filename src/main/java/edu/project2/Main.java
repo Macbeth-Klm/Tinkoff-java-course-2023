@@ -14,5 +14,4 @@ public class Main {
         MazeExplorer mazeExplorer = new MazeExplorer(DEFAULT_SCANNER, DEFAULT_RANDOM);
         mazeExplorer.run();
     }
-
 }

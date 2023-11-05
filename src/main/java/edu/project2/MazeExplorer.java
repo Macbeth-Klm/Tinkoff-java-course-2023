@@ -1,5 +1,6 @@
 package edu.project2;
 
+import edu.project2.generation.BinaryTreeAlgorithm;
 import edu.project2.generation.EllerAlgorithm;
 import edu.project2.generation.Generator;
 import edu.project2.rendering.PrettyPrint;
@@ -24,13 +25,19 @@ public class MazeExplorer {
         int height = scanner.nextInt();
         LOGGER.info("Введите ширину лабиринта (минимальная ширина равна 2): ");
         int width = scanner.nextInt();
-
-        // Добавить выбор алгоритма генерации
-
         if (height < 2 || width < 2) {
             throw new IllegalArgumentException("Неверно задан размер лабиринта!");
         }
-        Generator generator = new EllerAlgorithm(random);
+        LOGGER.info("Введите номер метода генерации (1 - алгоритм бинарного дерева, 2 - алгоритм Эллера): ");
+        int method = scanner.nextInt();
+        Generator generator;
+        if (method == 1) {
+            generator = new BinaryTreeAlgorithm(random);
+        } else if (method == 2) {
+            generator = new EllerAlgorithm(random);
+        } else {
+            throw new IllegalArgumentException("Неверно задан метод генерации!");
+        }
         maze = generator.generate(height, width);
     }
 
