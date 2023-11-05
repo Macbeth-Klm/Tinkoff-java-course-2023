@@ -22,16 +22,11 @@ public final class EllerAlgorithm implements Generator {
         intGrid = new int[height][width];
         cells = new Cell[height][width];
         for (int i = 0; i < height - 1; i++) {
-            /* Шаг 1 */
             initRow(i);
-            /* Шаг 2 */
             addingVerticalWalls(i);
-            /* Шаг 3 */
             addingHorizontalWalls(i);
-            /* Шаг 4.1*/
             preparingNewLine(i);
         }
-        /* Шаг 4.2 */
         addingEndLine();
         return new Maze(height, width, cells);
     }
@@ -50,10 +45,22 @@ public final class EllerAlgorithm implements Generator {
             if (doesAddWall.nextBoolean() || intGrid[row][j] == intGrid[row][j + 1]) {
                 cells[row][j].setRightWall(true);
             } else {
-                intGrid[row][j + 1] = intGrid[row][j];
+                mergeSets(row, j);
             }
         }
         cells[row][intGrid[row].length - 1].setRightWall(true); // Создание стены в крайней правой клетке
+    }
+
+    private void mergeSets(int row, int col) {
+        int goal = intGrid[row][col];
+        int condition = intGrid[row][col + 1];
+        for (int i = 0; i < intGrid.length; i++) {
+            for (int j = 0; j < intGrid[row].length; j++) {
+                if (intGrid[i][j] == condition) {
+                    intGrid[i][j] = goal;
+                }
+            }
+        }
     }
 
     private void addingHorizontalWalls(int row) {
@@ -66,18 +73,20 @@ public final class EllerAlgorithm implements Generator {
 
     private boolean isNotOnlyOneCellInSet(int row, int column) {
         for (int j = 1; column - j > -1; j++) {
-            if (cells[row][column - j].isRightWall()) {
+            if (intGrid[row][column - j] != intGrid[row][column]) {
                 break;
             } else if (!cells[row][column - j].isDownWall()) {
                 return true;
             }
         }
-        if (!cells[row][column].isRightWall()) {
-            for (int j = 1; column + j < intGrid[row].length; j++) {
-                if (cells[row][column + j].isRightWall()) {
+        if (column < cells[row].length - 1) {
+            for (int j = 1; column + j < cells[row].length; j++) {
+                if (intGrid[row][column + j] == intGrid[row][column]) {
+                    if (!cells[row][column + j].isDownWall()) {
+                        return true;
+                    }
+                } else {
                     break;
-                } else if (!cells[row][column + j].isDownWall()) {
-                    return true;
                 }
             }
         }
@@ -95,11 +104,12 @@ public final class EllerAlgorithm implements Generator {
         initRow(lastRow);
         Arrays.stream(cells[lastRow])
             .forEach(c -> c.setDownWall(true));
-        for (int j = 0; j < intGrid[lastRow].length - 2; j++) {
-            if (doesAddWall.nextBoolean() && intGrid[lastRow][j] == intGrid[lastRow][j + 1]) {
-                    cells[lastRow][j].setRightWall(true);
+        addingVerticalWalls(lastRow);
+        for (int j = 0; j < intGrid[lastRow].length - 1; j++) {
+            if (intGrid[lastRow][j] != intGrid[lastRow][j + 1]) {
+                cells[lastRow][j].setRightWall(false);
+                mergeSets(lastRow, j);
             }
-            cells[lastRow][j].setDownWall(true);
         }
         cells[lastRow][cells[lastRow].length - 1].setRightWall(true);
     }

@@ -6,12 +6,9 @@ import java.util.List;
 
 @SuppressWarnings("MagicNumber")
 public class PrettyPrint implements Renderer {
-    /*
-     * "\u001B[31m" - Красный цвет текста
-     * "\u001B[0m" - ANSI reset
-     */
     private static final String DOWN_WALL = "▃▃▃▃▃";
     private static final String SOLUTION_STEP = "\u001B[31m" + "●" + "\u001B[32m";
+
     private static final char RIGHT_WALL = '█';
 
     public PrettyPrint() {
