@@ -2,18 +2,21 @@ package edu.hw4;
 
 public final class ValidationError {
 
-    private final String error;
+    private final String errorMessage;
+    private final String animalAttribute;
 
-    private ValidationError(String error) {
-        this.error = error;
+    private ValidationError(String errorMessage, String animalAttribute) {
+        this.errorMessage = errorMessage;
+        this.animalAttribute = animalAttribute;
     }
 
     @SuppressWarnings("MagicNumber")
     public static ValidationError invalidName(Animal animal) {
+        String name = "name";
         if (animal.name().length() > 50) {
-            return new ValidationError("The name is too long!");
+            return new ValidationError("The name is too long!", name);
         } else if (animal.name().split(" ").length > 5) {
-            return new ValidationError("The name contains an unacceptable number of words!");
+            return new ValidationError("The name contains an unacceptable number of words!", name);
         } else {
             return null;
         }
@@ -21,9 +24,10 @@ public final class ValidationError {
 
     @SuppressWarnings("MagicNumber")
     public static ValidationError invalidAge(Animal animal) {
+        String age = "age";
         var isInvalidAge = false;
         if (animal.age() < 0) {
-            return new ValidationError("Age value is negative!");
+            return new ValidationError("Age value is negative!", age);
         }
         switch (animal.type()) {
             case CAT, DOG, BIRD:
@@ -41,14 +45,15 @@ public final class ValidationError {
                     isInvalidAge = true;
                 }
         }
-        return (isInvalidAge) ? new ValidationError("Age value is too high!") : null;
+        return (isInvalidAge) ? new ValidationError("Age value is too high!", age) : null;
     }
 
     @SuppressWarnings("MagicNumber")
     public static ValidationError invalidHeight(Animal animal) {
+        String height = "height";
         var isInvalidHeight = false;
         if (animal.height() < 0) {
-            return new ValidationError("Height value is negative!");
+            return new ValidationError("Height value is negative!", height);
         }
         switch (animal.type()) {
             case CAT, FISH:
@@ -71,14 +76,15 @@ public final class ValidationError {
                     isInvalidHeight = true;
                 }
         }
-        return (isInvalidHeight) ? new ValidationError("Height value is too high!") : null;
+        return (isInvalidHeight) ? new ValidationError("Height value is too high!", height) : null;
     }
 
     @SuppressWarnings("MagicNumber")
     public static ValidationError invalidWeight(Animal animal) {
+        String weight = "weight";
         var isInvalidWeight = false;
         if (animal.weight() < 0) {
-            return new ValidationError("Weight value is negative!");
+            return new ValidationError("Weight value is negative!", weight);
         }
         switch (animal.type()) {
             case CAT:
@@ -101,10 +107,14 @@ public final class ValidationError {
                     isInvalidWeight = true;
                 }
         }
-        return (isInvalidWeight) ? new ValidationError("Weight value is too high!") : null;
+        return (isInvalidWeight) ? new ValidationError("Weight value is too high!", weight) : null;
     }
 
-    public String getError() {
-        return error;
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public String getAnimalAttribute() {
+        return animalAttribute;
     }
 }

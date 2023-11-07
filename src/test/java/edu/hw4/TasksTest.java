@@ -81,10 +81,10 @@ public class TasksTest {
 
     @Test
     void shouldReturnAnimalWithLongestName() {
-        Animal.Type longestNameType = Tasks.task4(ANIMALS);
+        Animal longestNameAnimal = Tasks.task4(ANIMALS);
 
-        assertThat(longestNameType)
-            .isEqualTo(CAT);
+        assertThat(longestNameAnimal.name())
+            .isEqualTo("Toshibo");
     }
 
     @Test
@@ -162,7 +162,7 @@ public class TasksTest {
 
     @Test
     void shouldReturnAnimalsCountWhoseWeightExceedsTheirHeight() {
-        int animalsCountWhoseWeightExceedsTheirHeight = Tasks.task12(ANIMALS);
+        Long animalsCountWhoseWeightExceedsTheirHeight = Tasks.task12(ANIMALS);
 
         assertThat(animalsCountWhoseWeightExceedsTheirHeight)
             .isEqualTo(1);
@@ -172,7 +172,7 @@ public class TasksTest {
     void shouldReturnAnimalsWhoseNameExceedTwoWords() {
         List<Animal> newAnimals = new ArrayList<>(ANIMALS);
         Animal spiderSirJo = new Animal("Sir Jo", SPIDER, M, 2, 1, 2, true);
-        newAnimals.add(spiderSirJo);
+        Collections.addAll(newAnimals, spiderSirJo);
 
         List<Animal> animalsWithTwoWordName = Tasks.task13(newAnimals);
 
@@ -192,20 +192,26 @@ public class TasksTest {
 
     @Test
     void shouldReturnSumWeightAnimalsWhoseWeightExceedKAndBelowL() {
-        int k = 4;
-        int l = 10;
+        int k = 3;
+        int l = 5;
 
-        Integer sumWeight = Tasks.task15(ANIMALS, k, l);
+        Map<Animal.Type, Integer> sumWeightMap = Tasks.task15(ANIMALS, k, l);
 
-        assertThat(sumWeight)
-            .isEqualTo(11);
+        assertThat(sumWeightMap)
+            .containsExactlyInAnyOrderEntriesOf(Map.of(
+                CAT, 10,
+                DOG, 20,
+                BIRD, 0,
+                FISH, 0,
+                SPIDER, 0
+            ));
     }
 
     @Test
     void shouldReturnAnimalSortedByTypeThenSexThenName() {
         List<Animal> newAnimals = new ArrayList<>(ANIMALS);
         Animal spiderSirJo = new Animal("Sir Jo", SPIDER, M, 1, 2, 2, true);
-        newAnimals.add(spiderSirJo);
+        Collections.addAll(newAnimals, spiderSirJo);
 
         List<Animal> sortedAnimals = Tasks.task16(newAnimals);
 
@@ -293,7 +299,7 @@ public class TasksTest {
         assertThat(result.get("Sir de Natrius dush Oktopus Junior").size())
             .isOne();
         assertThat(result.get("Sir de Natrius dush Oktopus Junior").stream()
-            .toList().getFirst().getError())
+            .toList().getFirst().getErrorMessage())
             .isEqualTo("The name contains an unacceptable number of words!");
     }
 
