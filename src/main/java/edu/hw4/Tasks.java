@@ -145,29 +145,32 @@ public final class Tasks {
 
     public static Map<String, Set<ValidationError>> task19(List<Animal> animals) {
         return animals.stream()
-            .collect(Collectors.toMap(Animal::name, a -> {
-                Set<ValidationError> errors = new LinkedHashSet<>();
-                Collections.addAll(
-                    errors,
-                    ValidationError.invalidName(a),
-                    ValidationError.invalidAge(a),
-                    ValidationError.invalidHeight(a),
-                    ValidationError.invalidWeight(a)
-                );
-                return errors.stream().filter(Objects::nonNull).collect(Collectors.toCollection(LinkedHashSet::new));
-            })).entrySet().stream().filter(s -> !s.getValue().isEmpty())
+            .collect(Collectors.toMap(
+                Animal::name,
+                animal -> {
+                    Set<ValidationError> errors = new LinkedHashSet<>();
+                    Collections.addAll(
+                        errors,
+                        ValidationError.invalidName(animal),
+                        ValidationError.invalidAge(animal),
+                        ValidationError.invalidHeight(animal),
+                        ValidationError.invalidWeight(animal)
+                    );
+                    return errors;
+                }
+            )).entrySet().stream()
+            .peek(e -> e.getValue().removeIf(Objects::isNull))
+            .filter(e -> !e.getValue().isEmpty())
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static Map<String, String> task20(List<Animal> animals) {
         return task19(animals).entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, (Map.Entry<String, Set<ValidationError>> e) -> {
-                StringBuilder sb = new StringBuilder();
-                for (ValidationError error : e.getValue()) {
-                    sb.append(error.getAnimalAttribute()).append(", ");
-                }
-                sb.delete(sb.length() - 2, sb.length());
-                return sb.toString();
-            }));
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> e.getValue().stream()
+                    .map(ValidationError::getAnimalAttribute)
+                    .collect(Collectors.joining(", "))
+            ));
     }
 }
