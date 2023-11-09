@@ -17,6 +17,7 @@ public class LeeWaveAlgorithm implements Solver {
         boolean[][] visited = new boolean[maze.height()][maze.width()];
         while (!queue.isEmpty()) {
             Cell currentCell = queue.remove();
+            visited[currentCell.getRow()][currentCell.getCol()] = true;
             if (currentCell == end) {
                 break;
             }
@@ -29,22 +30,25 @@ public class LeeWaveAlgorithm implements Solver {
                     }
                 }
             }
-            visited[currentCell.getRow()][currentCell.getCol()] = true;
         }
-        List<Cell> path = new ArrayList<>();
-        Cell curCell = end;
-        while (curCell != start) {
-            path.add(curCell);
-            List<Cell> nextCells = nextEnableCells(maze, curCell.getRow(), curCell.getCol());
-            for (Cell cell : nextCells) {
-                if (dist[cell.getRow()][cell.getCol()] + 1 == dist[curCell.getRow()][curCell.getCol()]) {
-                    curCell = cell;
-                    break;
+        if (visited[end.getRow()][end.getCol()]) {
+            List<Cell> path = new ArrayList<>();
+            Cell curCell = end;
+            while (curCell != start) {
+                path.add(curCell);
+                List<Cell> nextCells = nextEnableCells(maze, curCell.getRow(), curCell.getCol());
+                for (Cell cell : nextCells) {
+                    if (dist[cell.getRow()][cell.getCol()] + 1 == dist[curCell.getRow()][curCell.getCol()]) {
+                        curCell = cell;
+                        break;
+                    }
                 }
             }
+            path.add(start);
+            return path.reversed();
+        } else {
+            return null;
         }
-        path.add(start);
-        return path.reversed();
     }
 
     private List<Cell> nextEnableCells(Maze maze, int row, int col) {

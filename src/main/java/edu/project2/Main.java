@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
     private static final Scanner DEFAULT_SCANNER = new Scanner(System.in);
-    private static final Random DEFAULT_RANDOM = new Random(10);
+    private static final Random DEFAULT_RANDOM = new Random();
 
     private Main() {
     }

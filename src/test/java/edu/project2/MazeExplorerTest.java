@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MazeExplorerTest {
     @Test
-    void shouldReturnCorrectPathWithLeeWaveAlgorithm() {
+    void shouldReturnCorrectPathWithLeeWaveAlgorithmFromMazeGeneratedWithEllerAlgorithm() {
         String initialConditions = """
             4
             5
@@ -44,7 +44,7 @@ class MazeExplorerTest {
     }
 
     @Test
-    void shouldReturnCorrectPathWithBinaryTreeAlgorithm() {
+    void shouldReturnCorrectPathWithLeeWaveAlgorithmFromMazeGeneratedWithBinaryTreeAlgorithm() {
         String initialConditions = """
             4
             5
@@ -135,5 +135,28 @@ class MazeExplorerTest {
             });
 
         Assertions.assertEquals("Неверно задан метод генерации!", invalidGenerateMethod.getMessage());
+    }
+
+    @Test
+    void shouldReturnNullInsteadOfPathBecauseOfLackOfSolutionBetweenGivenCells() {
+        String initialConditions = """
+            4
+            5
+            2
+            1
+            1
+            2
+            5
+            """;
+        Scanner scanner = new Scanner(new ByteArrayInputStream(initialConditions.getBytes()));
+        MazeExplorer mazeExplorer = new MazeExplorer(scanner, new Random(10));
+        Maze maze = mazeExplorer.getMaze();
+        maze.getCell(3, 3).setRightWall(true); // Создаём изолированную область в идеальном лабиринте
+        mazeExplorer.run();
+
+        List<Cell> path = mazeExplorer.getPath();
+
+        assertThat(path)
+            .isNull();
     }
 }

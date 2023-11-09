@@ -50,9 +50,6 @@ public class MazeExplorer {
         LOGGER.info("Введите столбец начальной точки: ");
         int col = scanner.nextInt();
         Cell root = maze.getCell(row - 1, col - 1);
-
-        // Добавить выбор алгоритма решения
-
         LOGGER.info("Введите строку целевой точки: ");
         row = scanner.nextInt();
         LOGGER.info("Введите столбец целевой точки: ");
@@ -61,7 +58,11 @@ public class MazeExplorer {
 
         Solver solver = new LeeWaveAlgorithm();
         path = solver.solve(maze, root, goal);
-        LOGGER.info(renderer.render(maze, path));
+        if (path != null) {
+            LOGGER.info(renderer.render(maze, path));
+        } else {
+            LOGGER.info("Данный лабиринт не имеет решения между данными координатами!");
+        }
     }
 
     public Maze getMaze() {
