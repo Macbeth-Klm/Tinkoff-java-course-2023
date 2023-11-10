@@ -145,21 +145,18 @@ public final class Tasks {
 
     public static Map<String, Set<ValidationError>> task19(List<Animal> animals) {
         return animals.stream()
-            .collect(Collectors.toMap(
-                Animal::name,
-                animal -> {
-                    Set<ValidationError> errors = new LinkedHashSet<>();
-                    Collections.addAll(
-                        errors,
-                        ValidationError.invalidName(animal),
-                        ValidationError.invalidAge(animal),
-                        ValidationError.invalidHeight(animal),
-                        ValidationError.invalidWeight(animal)
-                    );
-                    return errors;
-                }
-            )).entrySet().stream()
-            .peek(e -> e.getValue().removeIf(Objects::isNull))
+            .map(animal -> {
+                Set<ValidationError> errors = new LinkedHashSet<>();
+                Collections.addAll(
+                    errors,
+                    ValidationError.invalidName(animal),
+                    ValidationError.invalidAge(animal),
+                    ValidationError.invalidHeight(animal),
+                    ValidationError.invalidWeight(animal)
+                );
+                errors.removeIf(Objects::isNull);
+                return new MyEntry<>(animal.name(), errors);
+            })
             .filter(e -> !e.getValue().isEmpty())
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
