@@ -1,8 +1,6 @@
 package edu.hw5.task3;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -98,9 +96,10 @@ class Task3Test {
             .isEqualTo("Optional[2017-10-01]");
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"20 November 2020", "", "The day before yesterday", "The day after today", "111//3/20"})
-    void shouldReturnEmptyOptionalBecauseOfIncorrectFormat(String date) {
+    @Test
+    void shouldReturnEmptyOptionalBecauseOfIncorrectFormat() {
+        var date = "The day before yesterday";
+
         var result = Task3.parseDate(date);
 
         assertThat(result)

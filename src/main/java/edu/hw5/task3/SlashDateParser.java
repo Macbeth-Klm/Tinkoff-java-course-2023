@@ -8,6 +8,10 @@ import java.util.regex.Pattern;
 public class SlashDateParser extends DateParser {
     private final Pattern pattern = Pattern.compile("^\\d{1,2}/\\d{1,2}/(\\d{2}|\\d{4})$");
 
+    public SlashDateParser(DateParser nextParser) {
+        super(nextParser);
+    }
+
     @SuppressWarnings("MagicNumber")
     @Override
     public Optional<LocalDate> parseDate(String stringDate) {
@@ -22,6 +26,8 @@ public class SlashDateParser extends DateParser {
             }
             LocalDate date = LocalDate.of(year, month, day);
             return Optional.of(date);
+        } else if (nextParser != null) {
+            return nextParser.parseDate(stringDate);
         } else {
             return Optional.empty();
         }
