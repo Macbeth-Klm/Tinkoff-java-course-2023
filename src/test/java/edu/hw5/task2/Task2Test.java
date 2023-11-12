@@ -1,6 +1,5 @@
 package edu.hw5.task2;
 
-import edu.hw5.task2.Task2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

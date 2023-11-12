@@ -1,6 +1,5 @@
 package edu.hw5.task8;
 
-import edu.hw5.task8.Task8;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;

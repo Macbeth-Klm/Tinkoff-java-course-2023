@@ -1,6 +1,5 @@
 package edu.hw5.task5;
 
-import edu.hw5.task5.Task5;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 

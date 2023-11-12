@@ -1,6 +1,5 @@
 package edu.hw5.task1;
 
-import edu.hw5.task1.Task1;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.List;
