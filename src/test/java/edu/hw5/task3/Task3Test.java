@@ -2,6 +2,7 @@ package edu.hw5.task3;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class Task3Test {
@@ -53,7 +54,7 @@ class Task3Test {
         var result = Task3.parseDate(date);
 
         assertThat(result.toString())
-            .isEqualTo("Optional[2023-11-14]");
+            .isEqualTo("Optional[" + LocalDate.now().plusDays(1) + "]");
     }
 
     @Test
@@ -63,7 +64,7 @@ class Task3Test {
         var result = Task3.parseDate(date);
 
         assertThat(result.toString())
-            .isEqualTo("Optional[2023-11-13]");
+            .isEqualTo("Optional[" + LocalDate.now() + "]");
     }
 
     @Test
@@ -73,7 +74,7 @@ class Task3Test {
         var result = Task3.parseDate(date);
 
         assertThat(result.toString())
-            .isEqualTo("Optional[2023-11-12]");
+            .isEqualTo("Optional[" + LocalDate.now().minusDays(1) + "]");
     }
 
     @Test
@@ -83,7 +84,7 @@ class Task3Test {
         var result = Task3.parseDate(date);
 
         assertThat(result.toString())
-            .isEqualTo("Optional[2023-11-12]");
+            .isEqualTo("Optional[" + LocalDate.now().minusDays(1) + "]");
     }
 
     @Test
