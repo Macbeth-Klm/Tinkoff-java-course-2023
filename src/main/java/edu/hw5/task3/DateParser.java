@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public abstract class DateParser {
-    public DateParser nextParser;
+    protected DateParser nextParser;
 
     DateParser(DateParser nextParser) {
         this.nextParser = nextParser;
