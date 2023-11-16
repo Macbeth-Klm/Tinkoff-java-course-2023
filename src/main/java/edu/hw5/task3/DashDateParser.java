@@ -6,26 +6,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DashDateParser extends DateParser {
-    private final Pattern pattern = Pattern.compile("^\\d{4}-\\d{2}-\\d{1,2}$");
+    private final Pattern pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{1,2})$");
 
     public DashDateParser(DateParser nextParser) {
         super(nextParser);
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public Optional<LocalDate> parseDate(String stringDate) {
         Matcher matcher = pattern.matcher(stringDate);
         if (matcher.find()) {
-            String[] yearMonthDays = stringDate.split("-");
-            int year = Integer.parseInt(yearMonthDays[0]);
-            int month = Integer.parseInt(yearMonthDays[1]);
-            int day = Integer.parseInt(yearMonthDays[2]);
+            int year = Integer.parseInt(matcher.group(1));
+            int month = Integer.parseInt(matcher.group(2));
+            int day = Integer.parseInt(matcher.group(3));
             LocalDate date = LocalDate.of(year, month, day);
             return Optional.of(date);
-        } else if (nextParser != null) {
-            return nextParser.parseDate(stringDate);
-        } else {
-            return Optional.empty();
         }
+        return nextIfExist(nextParser, stringDate);
     }
 }

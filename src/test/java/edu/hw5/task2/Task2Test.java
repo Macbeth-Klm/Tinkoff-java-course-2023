@@ -13,7 +13,7 @@ class Task2Test {
 
     @Test
     void shouldReturnAllFridayThirteenthOfYear() {
-        var year = "1925";
+        var year = 1925;
 
         List<LocalDate> result = Task2.getAllFridayThirteenth(year);
 
@@ -22,8 +22,8 @@ class Task2Test {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"-2000000000", "1000000000", "twenty twenty four", ""})
-    void shouldThrowExceptionBecauseOfIncorrectInputFormatForAllFridaysMethod(String invalidYear) {
+    @ValueSource(ints = {-2000000000, 1000000000})
+    void shouldThrowExceptionBecauseOfIncorrectInputFormatForAllFridaysMethod(int invalidYear) {
         IllegalArgumentException ex = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             List<LocalDate> result = Task2.getAllFridayThirteenth(invalidYear);
         });

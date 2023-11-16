@@ -14,7 +14,7 @@ public class NearestDateParser extends DateParser {
             case "yesterday" -> Optional.of(LocalDate.now().minusDays(1));
             case "tomorrow" -> Optional.of(LocalDate.now().plusDays(1));
             case "today" -> Optional.of(LocalDate.now());
-            default -> ((nextParser != null)) ? nextParser.parseDate(stringDate) : Optional.empty();
+            default -> nextIfExist(nextParser, stringDate);
         };
     }
 }

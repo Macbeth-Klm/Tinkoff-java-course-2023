@@ -8,7 +8,7 @@ public final class Task6 {
     }
 
     public static boolean isSubstringWithRegex(String s, String t) {
-        Pattern pattern = Pattern.compile(s);
+        Pattern pattern = Pattern.compile(Pattern.quote(s));
         Matcher matcher = pattern.matcher(t);
         return matcher.find();
     }

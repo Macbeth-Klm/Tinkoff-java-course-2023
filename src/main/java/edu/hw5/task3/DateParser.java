@@ -11,4 +11,12 @@ public abstract class DateParser {
     }
 
     public abstract Optional<LocalDate> parseDate(String stringDate);
+
+    protected Optional<LocalDate> nextIfExist(DateParser parser, String date) {
+        if (parser != null) {
+            return parser.parseDate(date);
+        } else {
+            return Optional.empty();
+        }
+    }
 }

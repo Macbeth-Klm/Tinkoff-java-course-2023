@@ -96,7 +96,7 @@ class Task3Test {
         var result = Task3.parseDate(date);
 
         assertThat(result.toString())
-            .isEqualTo("Optional[2017-10-01]");
+            .isEqualTo("Optional[" + LocalDate.now().minusDays(2234) + "]");
     }
 
     @ParameterizedTest

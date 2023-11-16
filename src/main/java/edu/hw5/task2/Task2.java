@@ -11,15 +11,9 @@ public final class Task2 {
     private Task2() {
     }
 
-    public static List<LocalDate> getAllFridayThirteenth(String inputYear) {
-        int year;
+    public static List<LocalDate> getAllFridayThirteenth(int year) {
         IllegalArgumentException invalidInput =
             new IllegalArgumentException("Входные данные неверного формата!");
-        try {
-            year = Integer.parseInt(inputYear);
-        } catch (NumberFormatException ex) {
-            throw invalidInput;
-        }
         if (year > LocalDate.MAX.getYear() || year < LocalDate.MIN.getYear()) {
             throw invalidInput;
         }
@@ -35,7 +29,7 @@ public final class Task2 {
     }
 
     public static LocalDate getNextFridayThirteenth(LocalDate date) {
-        LocalDate nextFridayThirteenth = date.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+        LocalDate nextFridayThirteenth = date;
         while (nextFridayThirteenth.getDayOfMonth() != 13) {
             nextFridayThirteenth = nextFridayThirteenth.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
         }
