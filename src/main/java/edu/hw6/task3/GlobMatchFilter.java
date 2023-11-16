@@ -1,7 +1,6 @@
 package edu.hw6.task3;
 
 import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 
 public interface GlobMatchFilter extends AbstractFilter {

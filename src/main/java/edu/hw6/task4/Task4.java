@@ -22,7 +22,7 @@ public class Task4 {
                 bufferedOutputStream,
                 StandardCharsets.UTF_8
             );
-            PrintWriter printWriter = new PrintWriter(outputStreamWriter);
+            PrintWriter printWriter = new PrintWriter(outputStreamWriter)
         ) {
             printWriter.write(text);
         } catch (IOException e) {
