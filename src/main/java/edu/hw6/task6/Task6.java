@@ -2,8 +2,6 @@ package edu.hw6.task6;
 
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,21 +33,17 @@ public final class Task6 {
     }
 
     @SuppressWarnings("MagicNumber")
-    public static List<Integer> scanPorts() {
-        List<Integer> result = new ArrayList<>();
+    public static void scanPorts() {
         LOGGER.info("Протокол  Порт  Статус  Сервис");
         for (int port = 0; port <= 49151; port++) {
             if (scanTcpPort(port) == Status.BUSY) {
                 formattedPrint(Protocol.TCP, port);
-                result.add(port);
                 continue;
             }
             if (scanUdpPort(port) == Status.BUSY) {
                 formattedPrint(Protocol.UDP, port);
-                result.add(port);
             }
         }
-        return result;
     }
 
     private static Status scanTcpPort(int port) {
