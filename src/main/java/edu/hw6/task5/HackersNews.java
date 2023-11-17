@@ -13,6 +13,7 @@ public final class HackersNews {
     private HackersNews() {
     }
 
+    @SuppressWarnings("MagicNumber")
     public static long[] hackerNewsTopStories() {
         var httpRequest = HttpRequest.newBuilder()
             .uri(URI.create("https://hacker-news.firebaseio.com/v0/topstories.json"))
@@ -36,6 +37,7 @@ public final class HackersNews {
         return result;
     }
 
+    @SuppressWarnings("MagicNumber")
     public static String news(long id) {
         var httpRequest = HttpRequest.newBuilder()
             .uri(URI.create("https://hacker-news.firebaseio.com/v0/item/" + id + ".json"))

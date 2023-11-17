@@ -7,4 +7,5 @@ public interface AbstractFilter extends DirectoryStream.Filter<Path> {
     default AbstractFilter and(AbstractFilter anotherFilter) {
         return path -> this.accept(path) && anotherFilter.accept(path);
     }
+
 }

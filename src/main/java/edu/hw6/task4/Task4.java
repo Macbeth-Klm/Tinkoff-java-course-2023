@@ -11,7 +11,9 @@ import java.nio.file.Path;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedOutputStream;
 
-public class Task4 {
+public final class Task4 {
+    private Task4() {
+    }
 
     public static void write(Path path, String text) {
         try (
