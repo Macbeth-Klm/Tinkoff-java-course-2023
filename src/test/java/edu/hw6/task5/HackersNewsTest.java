@@ -10,7 +10,7 @@ class HackersNewsTest {
     void shouldReturnHackerNewsTopStories() {
         long[] id = HackersNews.hackerNewsTopStories();
         assertThat(id)
-            .hasSize(430);
+            .hasSize(435);
     }
 
     @Test

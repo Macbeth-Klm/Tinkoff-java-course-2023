@@ -18,7 +18,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class Task3Test {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Path DIRECTORY = Path.of("src/test/java/edu/hw6/task3");
+    private static final Path DIRECTORY = Path.of("src/test/java/edu/hw6/task3/");
+    private static final Path ITACHI_PATH = Path.of("src/test/java/edu/hw6/task3/itachi-uchiha.png");
+    private static final Path FAMILY_PATH = Path.of("src/test/java/edu/hw6/task3/MyFamily.txt");
+    private static final Path HELLO_PATH = Path.of("src/test/java/edu/hw6/task3/HelloWorld.txt");
 
     @Test
     void shouldReturnPathToPngImageInThePackage() {
@@ -33,7 +36,7 @@ class Task3Test {
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(DIRECTORY, filter)) {
             entries.forEach(path -> paths.add(path.toString()));
             assertThat(paths)
-                .containsExactly("src\\test\\java\\edu\\hw6\\task3\\itachi-uchiha.png");
+                .containsExactly(ITACHI_PATH.toString());
         } catch (IOException io) {
             LOGGER.error("Не удалось найти файл!", io);
             throw new RuntimeException(io);
@@ -50,7 +53,7 @@ class Task3Test {
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(DIRECTORY, filter)) {
             entries.forEach(path -> paths.add(path.toString()));
             assertThat(paths)
-                .containsExactly("src\\test\\java\\edu\\hw6\\task3\\MyFamily.txt");
+                .containsExactly(FAMILY_PATH.toString());
         } catch (IOException io) {
             LOGGER.error("Не удалось найти файл!", io);
             throw new RuntimeException(io);
@@ -65,10 +68,7 @@ class Task3Test {
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(DIRECTORY, filter)) {
             entries.forEach(path -> paths.add(path.toString()));
             assertThat(paths)
-                .containsExactlyInAnyOrder(
-                    "src\\test\\java\\edu\\hw6\\task3\\MyFamily.txt",
-                    "src\\test\\java\\edu\\hw6\\task3\\HelloWorld.txt"
-                );
+                .containsExactlyInAnyOrder(FAMILY_PATH.toString(), HELLO_PATH.toString());
         } catch (IOException io) {
             LOGGER.error("Не удалось найти файл!", io);
             throw new RuntimeException(io);
