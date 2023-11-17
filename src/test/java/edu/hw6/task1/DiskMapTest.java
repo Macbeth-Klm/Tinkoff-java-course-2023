@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DiskMapTest {
     private static final Logger LOGGER = LogManager.getLogger();
     private Map<String, String> diskMap;
-    private static final Path DISK_MAP_PATH = Path.of("src\\test\\java\\edu\\hw6\\task1\\diskMap.txt");
+    private static final Path DISK_MAP_PATH = Path.of("src/test/java/edu/hw6/task1/diskMap.txt");
 
     @BeforeEach
     void createDiskMap() {
@@ -42,7 +42,7 @@ class DiskMapTest {
 
     @Test
     void shouldLoadFromFileBecauseItAlreadyExists() {
-        Path path = Path.of("src\\test\\java\\edu\\hw6\\task1\\testDiskMap.txt");
+        Path path = Path.of("src/test/java/edu/hw6/task1/testDiskMap.txt");
 
         Map<String, String> existingDiskMap = new DiskMap(path);
 

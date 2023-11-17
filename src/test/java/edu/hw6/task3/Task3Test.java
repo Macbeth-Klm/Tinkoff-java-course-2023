@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class Task3Test {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Path DIRECTORY = Path.of("src\\test\\java\\edu\\hw6\\task3");
+    private static final Path DIRECTORY = Path.of("src/test/java/edu/hw6/task3");
 
     @Test
     void shouldReturnPathToPngImageInThePackage() {
