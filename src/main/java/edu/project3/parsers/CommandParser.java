@@ -15,8 +15,6 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import edu.project3.Configuration;
@@ -47,7 +45,7 @@ public final class CommandParser {
 
     private static final Pattern NGINX_PATTERN = Pattern.compile(NGINX_REGEX);
 
-    private CommandParser(String command) {
+    private CommandParser() {
     }
 
     @SuppressWarnings("MagicNumber")
