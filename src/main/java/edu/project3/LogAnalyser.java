@@ -16,11 +16,9 @@ public class LogAnalyser {
     public void analiseLogs(Scanner scanner) {
         LOGGER.info("Введите команду:");
         String inputCommand = scanner.nextLine();
-        CommandParser parser = new CommandParser(inputCommand);
-        List<String> logs = parser.parse();
-        if (logs != null) {
-            System.out.println(logs.get(1));
-            System.out.println(logs.get(0));
+        Configuration configuration = CommandParser.parse(inputCommand);
+        if (configuration != null) {
+            System.out.println(configuration);
         }
     }
 }
