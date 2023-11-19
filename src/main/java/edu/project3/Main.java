@@ -1,12 +1,10 @@
 package edu.project3;
 
-import java.io.IOException;
-
 public final class Main {
     private Main() {
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         String input = String.join(" ", args);
         LogAnalyser.analiseLogs(input);
     }
