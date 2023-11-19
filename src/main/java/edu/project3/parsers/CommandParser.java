@@ -1,5 +1,6 @@
 package edu.project3.parsers;
 
+import edu.project3.Configuration;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -15,15 +16,13 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import edu.project3.Configuration;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import static java.net.http.HttpClient.newHttpClient;
 
 public final class CommandParser {
-    private static final Logger LOGGER = LogManager.getLogger();
     /*
     URI - group №3
     LOCAL LOG - group №9
@@ -31,25 +30,15 @@ public final class CommandParser {
     TO DATE - group №18
     FORMAT - group №20
      */
-    private static final String URI_REGEX =
-        "(--path (https?:/+([0-9A-z-_%]+(\\.[0-9a-z]+)?)+\\.[0-9a-z]+/([0-9A-z-_%]+/*)+(\\.[0-9a-z]+)?))";
-    private static final String LOCAL_REGEX =
-        "(--path (([^<>:\"/\\\\|]+[/\\\\])+([^<>:\"/\\\\|])+((\\.[0-9A-z]+)|(\\*))))";
-    private static final String ISO_8601_REGEX =
-        "(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2})";
-    private static final String NGINX_REGEX =
-        "^java -jar nginx-log-stats\\.jar (" + URI_REGEX + "|" + LOCAL_REGEX
-            + ")( --from " + ISO_8601_REGEX + ")?"
-            + "( --to " + ISO_8601_REGEX + ")?"
-            + "( --format (adoc|markdown))?$";
 
-    private static final Pattern NGINX_PATTERN = Pattern.compile(NGINX_REGEX);
+    private static final Pattern NGINX_PATTERN = Pattern.compile(LogAnalyserRegex.COMMAND_REGEX);
 
     private CommandParser() {
     }
 
     @SuppressWarnings("MagicNumber")
     public static Configuration parse(String command) {
+        List<String> filesName = new ArrayList<>();
         Matcher matcher = NGINX_PATTERN.matcher(command);
         if (matcher.find()) {
             String logs;
@@ -58,13 +47,13 @@ public final class CommandParser {
             OffsetDateTime to;
             if (uriString != null) {
                 logs = getBodyOfResponse(uriString);
+                filesName.add(uriString);
             } else {
                 String localString = matcher.group(9);
                 try {
-                    logs = getBodyFromLocalPath(localString);
+                    logs = getBodyFromLocalPath(localString, filesName);
                 } catch (IOException e) {
-                    LOGGER.error("Не удалось получить данные с файла!", e);
-                    throw new RuntimeException(e);
+                    throw new RuntimeException("Не удалось получить данные с файла!");
                 }
             }
             try {
@@ -74,17 +63,15 @@ public final class CommandParser {
                 to =
                     (matcher.group(18) == null) ? null : OffsetDateTime.parse(matcher.group(18), formatter);
             } catch (DateTimeParseException e) {
-                LOGGER.error("Дата неправильного формата! Корректный формат yyyy-mm-ddThh:mm:ss±hh", e);
-                throw new RuntimeException(e);
+                throw new RuntimeException("Дата неправильного формата! Корректный формат yyyy-mm-ddThh:mm:ss±hh");
             }
             String format = (matcher.group(20) == null) ? "" : matcher.group(20);
-            return new Configuration(logs, from, to, format);
+            return new Configuration(logs, from, to, format, filesName);
         }
-        LOGGER.error("Строка неправильного формата, попробуйте снова!");
-        return null;
+        throw new RuntimeException("Строка неправильного формата, попробуйте снова!");
     }
 
-    @SuppressWarnings("MagicNubmer")
+    @SuppressWarnings("MagicNumber")
     private static String getBodyOfResponse(String uriString) {
         var httpRequest = HttpRequest.newBuilder()
             .uri(URI.create(uriString))
@@ -94,12 +81,11 @@ public final class CommandParser {
         try (var response = newHttpClient()) {
             return response.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
         } catch (Exception e) {
-            LOGGER.error("Не удалось получить ответ от сервера!", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("Не удалось получить ответ от сервера!");
         }
     }
 
-    private static String getBodyFromLocalPath(String localString) throws IOException {
+    private static String getBodyFromLocalPath(String localString, List<String> filesName) throws IOException {
         var containsAsterisk = localString.contains("*");
         if (containsAsterisk || localString.contains("?")) {
             String symbol = (containsAsterisk) ? "*" : "?";
@@ -114,6 +100,7 @@ public final class CommandParser {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (pathMatcher.matches(file)) {
+                        filesName.add(file.getFileName().toString());
                         sb.append(Files.readString(file));
                     }
                     return FileVisitResult.CONTINUE;

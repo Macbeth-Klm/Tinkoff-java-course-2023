@@ -1,11 +1,8 @@
 package edu.project3;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
-public record Configuration(String stringOfLogs, OffsetDateTime from, OffsetDateTime to, String format) {
-    @Override
-    public String toString() {
-        return "Logs = " + stringOfLogs + "\nFrom date = " + ((from == null) ? "" : from.toString())
-            + "\nTo date = " + ((to == null) ? "" : to.toString()) + "\nFormat = " + format + " ";
-    }
+public record Configuration(String logs, OffsetDateTime from, OffsetDateTime to, String format,
+                            List<String> filesName) {
 }

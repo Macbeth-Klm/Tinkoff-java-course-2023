@@ -3,7 +3,7 @@ package edu.project2;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Main {
+public final class Main {
     private static final Scanner DEFAULT_SCANNER = new Scanner(System.in);
     private static final Random DEFAULT_RANDOM = new Random();
 

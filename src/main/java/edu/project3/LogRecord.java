@@ -1,4 +1,7 @@
 package edu.project3;
 
-public record LogRecord() {
+import java.time.OffsetDateTime;
+
+public record LogRecord(String remoteAddr, String remoteUser, OffsetDateTime timeLocal, String request, int status,
+                        long bodyBytesSent, String httpReferer, String httpUserAgent) {
 }
