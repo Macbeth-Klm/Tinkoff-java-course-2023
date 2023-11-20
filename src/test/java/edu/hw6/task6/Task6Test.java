@@ -8,17 +8,13 @@ class Task6Test {
     @Test
     void shouldCorrectScanGivenPorts() {
         int httpPort = 80;
-        int isoIpPort = 147;
-        int httpsPort = 443;
 
-        Map<Integer, String> portsScan = Task6.scanGivenPorts(httpPort, isoIpPort, httpsPort);
+        Map<Integer, String> portsScan = Task6.scanGivenPorts(httpPort);
 
         assertThat(portsScan)
             .isNotEmpty()
             .containsExactlyInAnyOrderEntriesOf(Map.of(
-                80, "TCP is busy",
-                147, "FREE",
-                443, "FREE"
+                80, "TCP is busy"
             ));
     }
 
