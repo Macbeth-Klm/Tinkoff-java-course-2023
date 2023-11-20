@@ -1,6 +1,7 @@
 package edu.hw6.task5;
 
 import java.net.URI;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
@@ -20,8 +21,8 @@ public final class HackersNews {
             .GET()
             .timeout(Duration.ofSeconds(10L))
             .build();
-        try {
-            var response = newHttpClient().send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        try (var httpClient = HttpClient.newHttpClient()) {
+            var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             return parseTopStoriesId(response);
         } catch (Exception e) {
             return new long[] {};

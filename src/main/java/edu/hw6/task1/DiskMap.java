@@ -128,16 +128,8 @@ public class DiskMap implements Map<String, String> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        if (!delegate.isEmpty()) {
-            for (String key : delegate.keySet()) {
-                sb.append(key)
-                    .append(":")
-                    .append(delegate.get(key))
-                    .append("\n");
-            }
-            sb.delete(sb.length() - 1, sb.length());
-        }
-        return sb.toString();
+        return (delegate.isEmpty()) ? "" : delegate.entrySet()
+            .stream().map(entry -> entry.getKey() + ":" + entry.getValue() + "\n")
+            .collect(Collectors.joining());
     }
 }

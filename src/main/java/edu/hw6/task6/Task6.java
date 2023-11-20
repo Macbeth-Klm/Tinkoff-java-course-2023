@@ -2,6 +2,7 @@ package edu.hw6.task6;
 
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
+import java.util.HashMap;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,16 +35,28 @@ public final class Task6 {
 
     @SuppressWarnings("MagicNumber")
     public static void scanPorts() {
-        LOGGER.info("Протокол  Порт  Статус  Сервис");
+        LOGGER.info("Протокол   Порт   Сервис");
         for (int port = 0; port <= 49151; port++) {
             if (scanTcpPort(port) == Status.BUSY) {
                 formattedPrint(Protocol.TCP, port);
-                continue;
-            }
-            if (scanUdpPort(port) == Status.BUSY) {
+            } else if (scanUdpPort(port) == Status.BUSY) {
                 formattedPrint(Protocol.UDP, port);
             }
         }
+    }
+
+    public static Map<Integer, String> scanGivenPorts(int... ports) {
+        Map<Integer, String> busyPortsMap = new HashMap<>();
+        for (int port : ports) {
+            if (scanTcpPort(port) == Status.BUSY) {
+                busyPortsMap.put(port, "TCP is busy");
+            } else if (scanUdpPort(port) == Status.BUSY) {
+                busyPortsMap.put(port, "UDP is busy");
+            } else {
+                busyPortsMap.put(port, "FREE");
+            }
+        }
+        return busyPortsMap;
     }
 
     private static Status scanTcpPort(int port) {

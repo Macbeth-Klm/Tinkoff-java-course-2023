@@ -16,8 +16,7 @@ public final class FileCloner {
 
     public static void cloneFile(Path path) {
         if (!Files.exists(path)) {
-            LOGGER.info("Данного файла не существует");
-            return;
+            throw new IllegalArgumentException("Исходного файла не существует!");
         }
         Pattern pattern = Pattern.compile("\\.\\w+$");
         Matcher matcher = pattern.matcher(path.getFileName().toString());

@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HackersNewsTest {
-
     @Test
     void shouldReturnHackerNewsTopStories() {
         long[] id = HackersNews.hackerNewsTopStories();
         assertThat(id)
-            .hasSize(436);
+            .hasSize(492);
     }
 
     @Test
@@ -19,6 +18,6 @@ class HackersNewsTest {
 
         String storyTitle = HackersNews.news(id[0]);
         assertThat(storyTitle)
-            .isEqualTo("The real realtime preemption end game");
+            .isEqualTo("After Boeing declines to pay up, ransomware group leaks 45 GB of data");
     }
 }

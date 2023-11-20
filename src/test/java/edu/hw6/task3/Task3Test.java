@@ -1,14 +1,14 @@
 package edu.hw6.task3;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 import static edu.hw6.task3.GlobMatchFilter.globMatches;
 import static edu.hw6.task3.MagicNumberFilter.magicNumber;
 import static edu.hw6.task3.RegexContainsFilter.regexContains;
@@ -18,10 +18,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class Task3Test {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Path DIRECTORY = Path.of("src/test/java/edu/hw6/task3/");
-    private static final Path ITACHI_PATH = Path.of("src/test/java/edu/hw6/task3/itachi-uchiha.png");
-    private static final Path FAMILY_PATH = Path.of("src/test/java/edu/hw6/task3/MyFamily.txt");
-    private static final Path HELLO_PATH = Path.of("src/test/java/edu/hw6/task3/HelloWorld.txt");
+    private static final Path DIRECTORY = Path.of("src/test/java/edu/hw6/task3/resources/");
+    private static final Path ITACHI_PATH = Path.of("src/test/java/edu/hw6/task3/resources/itachi-uchiha.png");
+    private static final Path FAMILY_PATH = Path.of("src/test/java/edu/hw6/task3/resources/MyFamily.txt");
+    private static final Path HELLO_PATH = Path.of("src/test/java/edu/hw6/task3/resources/HelloWorld.txt");
 
     @Test
     void shouldReturnPathToPngImageInThePackage() {
