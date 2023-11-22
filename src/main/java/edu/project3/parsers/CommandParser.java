@@ -78,8 +78,8 @@ public final class CommandParser {
             .GET()
             .timeout(Duration.ofSeconds(10L))
             .build();
-        try (var response = newHttpClient()) {
-            return response.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
+        try (var httpClient = newHttpClient()) {
+            return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
         } catch (Exception e) {
             throw new RuntimeException("Не удалось получить ответ от сервера!");
         }

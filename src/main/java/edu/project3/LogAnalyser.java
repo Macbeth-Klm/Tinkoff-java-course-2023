@@ -8,12 +8,10 @@ import edu.project3.reports.DefaultLogReport;
 import edu.project3.reports.MarkDownReport;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class LogAnalyser {
@@ -23,12 +21,19 @@ public final class LogAnalyser {
 
     public static void analiseLogs(String inputCommand) {
         Configuration configuration = CommandParser.parse(inputCommand);
+
         List<LogRecord> logRecordList = NginxLogParser.parse(configuration);
-        Map<String, String> commonInfoMap = commonInfo(logRecordList, configuration);
-        Map<String, Long> resourcesMap = resources(logRecordList);
-        Map<Integer, Long> codesMap = codes(logRecordList);
-        Map<String, Long> httpRequestMethodsMap = httpRequestMethods(logRecordList);
-        Map<String, Long> httpUserAgentMap = httpUserAgent(logRecordList);
+        OffsetDateTime startDate = configuration.from();
+        OffsetDateTime endDate = configuration.to();
+        List<LogRecord> logRecordFilteredByDateList = logRecordList.stream()
+            .filter(lr -> lr.checkDate(startDate, endDate)).toList();
+
+        Map<String, String> commonInfoMap = commonInfo(logRecordFilteredByDateList, configuration);
+        Map<String, Long> resourcesMap = resources(logRecordFilteredByDateList);
+        Map<Integer, Long> codesMap = codes(logRecordFilteredByDateList);
+        Map<String, Long> httpRequestMethodsMap = httpRequestMethods(logRecordFilteredByDateList);
+        Map<String, Long> httpUserAgentMap = httpUserAgent(logRecordFilteredByDateList);
+
         AbstractReport report = switch (configuration.format()) {
             case "markdown" -> new MarkDownReport(
                 commonInfoMap,
@@ -55,18 +60,9 @@ public final class LogAnalyser {
         report.getReport();
     }
 
-    private static Map<String, String> commonInfo(List<LogRecord> logRecordList, Configuration configuration) {
-        OffsetDateTime startDate = configuration.from();
-        OffsetDateTime endDate = configuration.to();
-        long requestsCount = logRecordList.size();
-        long averageByteSent = (long) logRecordList.stream().filter(lr -> {
-                var timeLocal = lr.timeLocal();
-                var from = configuration.from();
-                var to = configuration.to();
-                return (from == null || !timeLocal.isBefore(from))
-                    && (to == null || !timeLocal.isAfter(to))
-                    && (from == null || to == null || (!timeLocal.isBefore(from) && !timeLocal.isAfter(to)));
-            }).mapToLong(LogRecord::bodyBytesSent)
+    private static Map<String, String> commonInfo(List<LogRecord> filteredLogRecordList, Configuration configuration) {
+        long requestsCount = filteredLogRecordList.size();
+        long averageByteSent = (long) filteredLogRecordList.stream().mapToLong(LogRecord::bodyBytesSent)
             .average().orElse(0);
         Map<String, String> commonInfo = new LinkedHashMap<>();
         commonInfo.put(
@@ -74,6 +70,8 @@ public final class LogAnalyser {
             configuration.filesName().toString().substring(1, configuration.filesName().toString().length() - 1)
         );
         DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        OffsetDateTime startDate = configuration.from();
+        OffsetDateTime endDate = configuration.to();
         String dateToString = (startDate != null) ? startDate.format(formatter) : "-";
         commonInfo.put("Начальная дата", dateToString);
         dateToString = (endDate != null) ? endDate.format(formatter) : "-";
@@ -83,8 +81,8 @@ public final class LogAnalyser {
         return commonInfo;
     }
 
-    private static Map<String, Long> resources(List<LogRecord> logRecordList) {
-        Map<String, Long> unsortedMap = logRecordList.stream()
+    private static Map<String, Long> resources(List<LogRecord> filteredLogRecordList) {
+        Map<String, Long> unsortedMap = filteredLogRecordList.stream()
             .collect(Collectors.groupingBy(
                 lr -> {
                     String[] requestArray = lr.request().split(" ");
@@ -92,39 +90,17 @@ public final class LogAnalyser {
                 },
                 Collectors.counting()
             ));
-        List<Long> values = new ArrayList<>();
-        for (Map.Entry<String, Long> entry : unsortedMap.entrySet()) {
-            values.add(entry.getValue());
-        }
-        values.sort(Comparator.reverseOrder());
-        Map<String, Long> result = new LinkedHashMap<>();
-        for (Long value : values) {
-            for (Map.Entry<String, Long> entry : unsortedMap.entrySet()) {
-                if (Objects.equals(entry.getValue(), value)) {
-                    result.put(entry.getKey(), value);
-                }
-            }
-        }
-        return result;
+        return unsortedMap.entrySet().stream()
+            .sorted(Comparator.comparingLong((Map.Entry<String, Long> e) -> e.getValue()).reversed())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     private static Map<Integer, Long> codes(List<LogRecord> logRecordList) {
         Map<Integer, Long> unsortedMap = logRecordList.stream()
             .collect(Collectors.groupingBy(LogRecord::status, Collectors.counting()));
-        List<Long> values = new ArrayList<>();
-        for (Map.Entry<Integer, Long> entry : unsortedMap.entrySet()) {
-            values.add(entry.getValue());
-        }
-        values.sort(Comparator.reverseOrder());
-        Map<Integer, Long> result = new LinkedHashMap<>();
-        for (Long value : values) {
-            for (Map.Entry<Integer, Long> entry : unsortedMap.entrySet()) {
-                if (Objects.equals(entry.getValue(), value)) {
-                    result.put(entry.getKey(), value);
-                }
-            }
-        }
-        return result;
+        return unsortedMap.entrySet().stream()
+            .sorted(Comparator.comparingLong((Map.Entry<Integer, Long> e) -> e.getValue()).reversed())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     // Доп. характеристика
@@ -134,39 +110,17 @@ public final class LogAnalyser {
                 lr -> lr.request().substring(0, lr.request().indexOf(" ") + 1),
                 Collectors.counting()
             ));
-        List<Long> values = new ArrayList<>();
-        for (Map.Entry<String, Long> entry : unsortedMap.entrySet()) {
-            values.add(entry.getValue());
-        }
-        values.sort(Comparator.reverseOrder());
-        Map<String, Long> result = new LinkedHashMap<>();
-        for (Long value : values) {
-            for (Map.Entry<String, Long> entry : unsortedMap.entrySet()) {
-                if (Objects.equals(entry.getValue(), value)) {
-                    result.put(entry.getKey(), value);
-                }
-            }
-        }
-        return result;
+        return unsortedMap.entrySet().stream()
+            .sorted(Comparator.comparingLong((Map.Entry<String, Long> e) -> e.getValue()).reversed())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     // Доп. характеристика
     private static Map<String, Long> httpUserAgent(List<LogRecord> logRecordList) {
         Map<String, Long> unsortedMap = logRecordList.stream()
             .collect(Collectors.groupingBy(LogRecord::httpUserAgent, Collectors.counting()));
-        List<Long> values = new ArrayList<>();
-        for (Map.Entry<String, Long> entry : unsortedMap.entrySet()) {
-            values.add(entry.getValue());
-        }
-        values.sort(Comparator.reverseOrder());
-        Map<String, Long> result = new LinkedHashMap<>();
-        for (Long value : values) {
-            for (Map.Entry<String, Long> entry : unsortedMap.entrySet()) {
-                if (Objects.equals(entry.getValue(), value)) {
-                    result.put(entry.getKey(), value);
-                }
-            }
-        }
-        return result;
+        return unsortedMap.entrySet().stream()
+            .sorted(Comparator.comparingLong((Map.Entry<String, Long> e) -> e.getValue()).reversed())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 }
