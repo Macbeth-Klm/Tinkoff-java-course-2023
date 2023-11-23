@@ -7,7 +7,6 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static java.net.http.HttpClient.newHttpClient;
 
 public final class HackersNews {
 
@@ -45,8 +44,8 @@ public final class HackersNews {
             .GET()
             .timeout(Duration.ofSeconds(10L))
             .build();
-        try {
-            var response = newHttpClient().send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        try (var httpClient = HttpClient.newHttpClient()) {
+            var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             return parseNewTitle(response);
         } catch (Exception e) {
             return null;

@@ -9,7 +9,7 @@ class HackersNewsTest {
     void shouldReturnHackerNewsTopStories() {
         long[] id = HackersNews.hackerNewsTopStories();
         assertThat(id)
-            .hasSize(499);
+            .hasSize(500);
     }
 
     @Test
@@ -18,6 +18,6 @@ class HackersNewsTest {
 
         String storyTitle = HackersNews.news(id[0]);
         assertThat(storyTitle)
-            .isEqualTo("After Boeing declines to pay up, ransomware group leaks 45 GB of data");
+            .isEqualTo("Git Branches: Intuition and Reality");
     }
 }
