@@ -8,35 +8,16 @@ public final class PiCalculator {
     private static final double CIRCLE_RADIUS = 1;
     private static final double SQUARE_SIZE = 2;
 
-    private record Point(double x, double y) {
-    }
-
-    private static class PiCalculatorThread extends Thread {
-        private long circlePoints;
-        private final long totalPoints;
-
-        public PiCalculatorThread(long totalPoints) {
-            this.totalPoints = totalPoints;
-        }
-
-        @Override
-        public void run() {
-            circlePoints = getCirclePointsCount(totalPoints);
-        }
-
-        public long getCirclePoints() {
-            return circlePoints;
-        }
-    }
-
     private PiCalculator() {
     }
 
+    @SuppressWarnings("MagicNumber")
     public static double oneThreadApproximatePi(long totalPoints) {
         long circlePoints = getCirclePointsCount(totalPoints);
         return 4 * ((double) circlePoints / totalPoints);
     }
 
+    @SuppressWarnings("MagicNumber")
     public static double multiThreadApproximatePi(long totalPoints, int threadCount) {
         long threadTotalPoint = totalPoints / threadCount;
         PiCalculatorThread[] threads = new PiCalculatorThread[threadCount];
@@ -76,5 +57,26 @@ public final class PiCalculator {
             Math.pow(point.x() - CIRCLE_CENTER.x(), 2) + Math.pow(point.y() - CIRCLE_CENTER.y(), 2)
         );
         return d <= CIRCLE_RADIUS;
+    }
+
+    private record Point(double x, double y) {
+    }
+
+    private static class PiCalculatorThread extends Thread {
+        private long circlePoints;
+        private final long totalPoints;
+
+        PiCalculatorThread(long totalPoints) {
+            this.totalPoints = totalPoints;
+        }
+
+        @Override
+        public void run() {
+            circlePoints = getCirclePointsCount(totalPoints);
+        }
+
+        public long getCirclePoints() {
+            return circlePoints;
+        }
     }
 }
