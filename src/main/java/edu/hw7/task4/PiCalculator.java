@@ -1,7 +1,11 @@
 package edu.hw7.task4;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 
 public final class PiCalculator {
     private static final Point CIRCLE_CENTER = new Point(1, 1);
@@ -20,21 +24,21 @@ public final class PiCalculator {
     @SuppressWarnings("MagicNumber")
     public static double multiThreadApproximatePi(long totalPoints, int threadCount) {
         long threadTotalPoint = totalPoints / threadCount;
-        PiCalculatorThread[] threads = new PiCalculatorThread[threadCount];
-        for (int i = 0; i < threadCount; i++) {
-            threads[i] = new PiCalculatorThread(threadTotalPoint);
-            threads[i].start();
-        }
-        try {
-            for (int i = 0; i < threadCount; i++) {
-                threads[i].join();
-            }
+        long circlePoints;
+        try (var executorService = Executors.newFixedThreadPool(threadCount)) {
+            Callable<Long> calculateCirclePoints = () -> getCirclePointsCount(threadTotalPoint);
+            var tasks = Stream.generate(() -> calculateCirclePoints).limit(threadCount).toList();
+            List<Future<Long>> futuresCirclePoints = executorService.invokeAll(tasks);
+            circlePoints = futuresCirclePoints.stream().map(f -> {
+                try {
+                    return f.get();
+                } catch (Exception e) {
+                    throw new RuntimeException("Error while get value from the Future objects!");
+                }
+            }).reduce(Long::sum).orElse(0L);
         } catch (InterruptedException e) {
-            throw new RuntimeException("Error while joing threads", e);
+            throw new RuntimeException("Error while threads execute tasks!");
         }
-        long circlePoints = Arrays.stream(threads)
-            .map(PiCalculatorThread::getCirclePoints)
-            .reduce(Long::sum).orElse(0L);
         return 4 * ((double) circlePoints / totalPoints);
     }
 
@@ -60,23 +64,5 @@ public final class PiCalculator {
     }
 
     private record Point(double x, double y) {
-    }
-
-    private static class PiCalculatorThread extends Thread {
-        private long circlePoints;
-        private final long totalPoints;
-
-        PiCalculatorThread(long totalPoints) {
-            this.totalPoints = totalPoints;
-        }
-
-        @Override
-        public void run() {
-            circlePoints = getCirclePointsCount(totalPoints);
-        }
-
-        public long getCirclePoints() {
-            return circlePoints;
-        }
     }
 }

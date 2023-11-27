@@ -1,18 +1,17 @@
 package edu.hw7.task3and3point5;
 
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static java.lang.Thread.sleep;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class SynchronizedDatabaseTest {
     private static final Logger LOGGER = LogManager.getLogger();
     private SynchronizedDatabase database;
-    private List<Person> result;
+    private Person result;
 
     @BeforeEach
     void initDatabase() {
@@ -43,7 +42,7 @@ class SynchronizedDatabaseTest {
         }
 
         assertThat(result)
-            .containsExactly(person);
+            .isEqualTo(person);
     }
 
     @Test
@@ -71,7 +70,7 @@ class SynchronizedDatabaseTest {
         }
 
         assertThat(result)
-            .containsExactly(person);
+            .isEqualTo(person);
         assertThat(database.getIdTable().isEmpty()
             && database.getNameTable().isEmpty()
             && database.getAddressTable().isEmpty()
@@ -103,7 +102,7 @@ class SynchronizedDatabaseTest {
             throw new RuntimeException(e);
         }
 
-        assertTrue(result.isEmpty());
+        assertNull(result);
     }
 
     @Test
@@ -130,6 +129,6 @@ class SynchronizedDatabaseTest {
         }
 
         assertThat(result)
-            .containsExactly(person);
+            .isEqualTo(person);
     }
 }

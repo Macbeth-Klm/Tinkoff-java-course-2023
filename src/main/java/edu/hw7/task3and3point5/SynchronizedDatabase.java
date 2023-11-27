@@ -1,7 +1,6 @@
 package edu.hw7.task3and3point5;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SynchronizedDatabase implements PersonDatabase {
@@ -29,27 +28,18 @@ public class SynchronizedDatabase implements PersonDatabase {
     }
 
     @Override
-    public synchronized List<Person> findByName(String name) {
-        return nameTable.entrySet().stream()
-            .filter(e -> e.getKey().equals(name))
-            .map(Map.Entry::getValue)
-            .toList();
+    public synchronized Person findByName(String name) {
+        return nameTable.get(name);
     }
 
     @Override
-    public synchronized List<Person> findByAddress(String address) {
-        return addressTable.entrySet().stream()
-            .filter(e -> e.getKey().equals(address))
-            .map(Map.Entry::getValue)
-            .toList();
+    public synchronized Person findByAddress(String address) {
+        return addressTable.get(address);
     }
 
     @Override
-    public synchronized List<Person> findByPhone(String phone) {
-        return phoneTable.entrySet().stream()
-            .filter(e -> e.getKey().equals(phone))
-            .map(Map.Entry::getValue)
-            .toList();
+    public synchronized Person findByPhone(String phone) {
+        return phoneTable.get(phone);
     }
 
     public Map<Integer, Person> getIdTable() {
