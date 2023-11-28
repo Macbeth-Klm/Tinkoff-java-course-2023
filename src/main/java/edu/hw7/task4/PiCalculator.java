@@ -1,5 +1,6 @@
 package edu.hw7.task4;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -8,9 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 public final class PiCalculator {
-    private static final Point CIRCLE_CENTER = new Point(1, 1);
     private static final double CIRCLE_RADIUS = 1;
-    private static final double SQUARE_SIZE = 2;
 
     private PiCalculator() {
     }
@@ -27,7 +26,11 @@ public final class PiCalculator {
         long circlePoints;
         try (var executorService = Executors.newFixedThreadPool(threadCount)) {
             Callable<Long> calculateCirclePoints = () -> getCirclePointsCount(threadTotalPoint);
-            var tasks = Stream.generate(() -> calculateCirclePoints).limit(threadCount).toList();
+            var tasks = new ArrayList<>(Stream.generate(() -> calculateCirclePoints).limit(threadCount).toList());
+            long remainingPoints = totalPoints % threadCount;
+            if (remainingPoints != 0) {
+                tasks.add(() -> getCirclePointsCount(remainingPoints));
+            }
             List<Future<Long>> futuresCirclePoints = executorService.invokeAll(tasks);
             circlePoints = futuresCirclePoints.stream().map(f -> {
                 try {
@@ -46,8 +49,8 @@ public final class PiCalculator {
         long result = 0;
         for (long i = 0; i < totalPoints; i++) {
             Point point = new Point(
-                ThreadLocalRandom.current().nextDouble(SQUARE_SIZE),
-                ThreadLocalRandom.current().nextDouble(SQUARE_SIZE)
+                ThreadLocalRandom.current().nextDouble(CIRCLE_RADIUS),
+                ThreadLocalRandom.current().nextDouble(CIRCLE_RADIUS)
             );
             if (circleContainsPoint(point)) {
                 result++;
@@ -57,10 +60,7 @@ public final class PiCalculator {
     }
 
     private static boolean circleContainsPoint(Point point) {
-        double d = Math.sqrt(
-            Math.pow(point.x() - CIRCLE_CENTER.x(), 2) + Math.pow(point.y() - CIRCLE_CENTER.y(), 2)
-        );
-        return d <= CIRCLE_RADIUS;
+        return Math.pow(point.x(), 2) + Math.pow(point.y(), 2) <= CIRCLE_RADIUS;
     }
 
     private record Point(double x, double y) {
