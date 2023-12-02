@@ -38,6 +38,9 @@ public class PasswordMiner {
 
     @SuppressWarnings("MagicNumber")
     public ConcurrentHashMap<String, String> multiThreadMining(int threadCount) {
+        if (threadCount == 0) {
+            throw new IllegalStateException("Thread count must be more than zero!");
+        }
         if (threadCount == 1) {
             return singleThreadMining();
         }
