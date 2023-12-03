@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,14 +32,17 @@ public class Server {
 
     @SuppressWarnings("MagicNumber")
     public void listen() {
-        try (ExecutorService threadPool = Executors.newFixedThreadPool(3)) {
+        try (serverSocket;
+             ExecutorService threadPool = Executors.newFixedThreadPool(3)) {
             LOGGER.info("Server started...");
             while (isRunning) {
                 Socket socket = serverSocket.accept();
                 LOGGER.info("Client connected!");
                 threadPool.execute(new ClientHandler(socket));
             }
-        } catch (IOException e) {
+            threadPool.shutdown();
+            threadPool.awaitTermination(2000, TimeUnit.MILLISECONDS);
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
