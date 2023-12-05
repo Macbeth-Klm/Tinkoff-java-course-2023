@@ -20,10 +20,11 @@ class ThreadPoolTest {
             threadPool.execute(() -> result.add(FibonacciNumbers.calculate(7)));
             threadPool.execute(() -> result.add(FibonacciNumbers.calculate(40)));
             threadPool.start();
-            threadPool.shutdown();
-
-            assertThat(result)
-                .containsExactlyInAnyOrder(2, 1, 1, 5, 3, 8, 13, 102334155);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+
+        assertThat(result)
+            .containsExactlyInAnyOrder(2, 1, 1, 5, 3, 8, 13, 102334155);
     }
 }

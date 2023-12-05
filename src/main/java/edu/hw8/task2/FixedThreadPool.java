@@ -22,9 +22,11 @@ public class FixedThreadPool implements ThreadPool {
         for (int i = 0; i < nThreads; i++) {
             threads[i] = new Thread(() -> {
                 while (!(isShutdown && taskQueue.isEmpty())) {
-                    Runnable task = taskQueue.poll();
-                    if (task != null) {
+                    try {
+                        Runnable task = taskQueue.take();
                         task.run();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                     }
                 }
             });
@@ -34,22 +36,22 @@ public class FixedThreadPool implements ThreadPool {
 
     @Override
     public void execute(Runnable runnable) {
-        if (!isShutdown) {
-            taskQueue.add(runnable);
-        } else {
+        if (isShutdown) {
             throw new RejectedExecutionException();
+        }
+        try {
+            taskQueue.put(runnable);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
     @Override
-    public void shutdown() {
+    @SuppressWarnings("MagicNumber")
+    public void shutdown() throws InterruptedException {
         isShutdown = true;
         for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            thread.join(2000);
         }
         for (Thread thread : threads) {
             thread.interrupt();
@@ -57,7 +59,7 @@ public class FixedThreadPool implements ThreadPool {
     }
 
     @Override
-    public void close() {
+    public void close() throws InterruptedException {
         shutdown();
     }
 }

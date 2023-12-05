@@ -23,8 +23,8 @@ public class PasswordMiner {
     public ConcurrentHashMap<String, String> singleThreadMining() {
         for (int i = 0; i < passwordMaxSize; i++) {
             var generator = new PasswordGenerator(passwordMaxSize - i);
-            while (generator.hasNextPassword()) {
-                String password = generator.generate();
+            while (generator.hasNext()) {
+                String password = generator.next();
                 String hash = createMd5Hash(password);
 
                 if (md5ToUserMap.containsKey(hash)) {
@@ -59,7 +59,7 @@ public class PasswordMiner {
                                 passwordPerThread
                             );
                             for (int k = 0; k < passwordPerThread; k++) {
-                                String password = generator.generate();
+                                String password = generator.next();
                                 String hash = createMd5Hash(password);
 
                                 if (md5ToUserMap.containsKey(hash)) {
@@ -77,8 +77,8 @@ public class PasswordMiner {
                         (threadCount - 1) * passwordPerThread,
                         passwordPerThread + remainder
                     );
-                    while (generator.hasNextPassword()) {
-                        String password = generator.generate();
+                    while (generator.hasNext()) {
+                        String password = generator.next();
                         String hash = createMd5Hash(password);
 
                         if (md5ToUserMap.containsKey(hash)) {

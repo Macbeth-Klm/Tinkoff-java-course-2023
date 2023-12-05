@@ -9,20 +9,14 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Server {
     private static final Logger LOGGER = LogManager.getLogger();
     private final ServerSocket serverSocket;
-    private boolean isRunning;
-    private final int port;
-    private static final String OFF_SERVER_COMMAND = "//OFF_SERVER";
 
     public Server(int port) {
-        this.port = port;
-        isRunning = true;
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -32,24 +26,23 @@ public class Server {
 
     @SuppressWarnings("MagicNumber")
     public void listen() {
-        try (serverSocket;
-             ExecutorService threadPool = Executors.newFixedThreadPool(3)) {
+        try (ExecutorService threadPool = Executors.newFixedThreadPool(3)) {
             LOGGER.info("Server started...");
-            while (isRunning) {
+            while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 LOGGER.info("Client connected!");
                 threadPool.execute(new ClientHandler(socket));
             }
-            threadPool.shutdown();
-            threadPool.awaitTermination(2000, TimeUnit.MILLISECONDS);
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ignored) {
         }
     }
 
     public void close() {
-        isRunning = false;
-        new Client(port).sendRequest(OFF_SERVER_COMMAND);
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private record ClientHandler(Socket socket) implements Runnable {
@@ -71,7 +64,7 @@ public class Server {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                  PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
                 String request;
-                while (((request = in.readLine()) != null && !request.equals(OFF_SERVER_COMMAND))) {
+                while (((request = in.readLine()) != null)) {
                     var response = REQUEST_TO_RESPONSE.getOrDefault(request, DEFAULT_RESPONSE);
                     out.println(response);
                 }

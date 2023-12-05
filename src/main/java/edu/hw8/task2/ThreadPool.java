@@ -5,5 +5,5 @@ public interface ThreadPool extends AutoCloseable {
 
     void execute(Runnable runnable);
 
-    void shutdown();
+    void shutdown() throws InterruptedException;
 }

@@ -1,8 +1,9 @@
 package edu.hw8.task3;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class PasswordGenerator {
+public class PasswordGenerator implements Iterator<String> {
     private final static String ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
     private final int[] lettersPositions;
     private long passwordsCount;
@@ -26,8 +27,9 @@ public class PasswordGenerator {
         this.passwordsCount = passwordsCount;
     }
 
-    public String generate() {
-        if (!hasNextPassword()) {
+    @Override
+    public String next() {
+        if (!hasNext()) {
             throw new NoSuchElementException("No passwords");
         }
         var password = new StringBuilder(passwordLength);
@@ -48,7 +50,8 @@ public class PasswordGenerator {
         return password.toString();
     }
 
-    public boolean hasNextPassword() {
+    @Override
+    public boolean hasNext() {
         return passwordsCount > 0;
     }
 }
