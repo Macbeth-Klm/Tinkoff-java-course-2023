@@ -10,17 +10,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StatsCollectorTest {
     @Test
     void shouldReturnStatisticsWhenOneProducer() {
+        List<StatsCollector.Statistics> result;
+
         try (var statsCollector = new StatsCollector(2)) {
             Thread producer = new Thread(() -> statsCollector.push("sum", new double[] {1, 2, 3, 4}));
             producer.start();
             producer.join();
-            assertThat(statsCollector.stats())
-                .containsExactlyInAnyOrder(
-                    new StatsCollector.Statistics("sum", 10)
-                );
+            result = statsCollector.stats();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        assertThat(result)
+            .containsExactlyInAnyOrder(
+                new StatsCollector.Statistics("sum", 10)
+            );
     }
 
     @Test
@@ -57,7 +61,6 @@ public class StatsCollectorTest {
             };
             producers.execute(firstProducerTasks);
             producers.execute(secondProducerTasks);
-
             result = statsCollector.stats();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
