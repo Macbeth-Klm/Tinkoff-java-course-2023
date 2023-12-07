@@ -46,7 +46,7 @@ public class FractalInfernoTest {
         endTime = System.nanoTime();
         executionTime.add((endTime - startTime) / 1_000_000);
         LOGGER.info(
-            "Скорость однопоточной программы равна {}, многопоточной - {}",
+            "Время работы однопоточной программы равно {} мс, многопоточной - {} мс",
             executionTime.get(0),
             executionTime.get(1)
         );
