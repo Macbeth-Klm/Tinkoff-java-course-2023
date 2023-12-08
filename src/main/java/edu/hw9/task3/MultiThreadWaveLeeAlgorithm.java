@@ -27,10 +27,7 @@ public class MultiThreadWaveLeeAlgorithm implements Solver {
     @Override
     @SuppressWarnings("MagicNumber")
     public List<Cell> solve(Maze maze, Cell root, Cell end) {
-        if (root == end) {
-            return null;
-        }
-        if (!maze.isPerfect()) {
+        if (root == end || !maze.isPerfect()) {
             return null;
         }
         this.maze = maze;
