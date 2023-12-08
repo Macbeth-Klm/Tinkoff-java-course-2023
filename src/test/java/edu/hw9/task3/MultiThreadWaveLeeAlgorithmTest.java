@@ -22,13 +22,10 @@ public class MultiThreadWaveLeeAlgorithmTest {
         Maze maze = generator.generate(4, 5);
         Renderer renderer = new PrettyPrint();
         LOGGER.info(renderer.render(maze));
-
         Cell root = maze.getCell(0, 0);
-        LOGGER.info("Введите строку целевой точки: ");
         Cell goal = maze.getCell(1, 4);
 
         Solver solver = new MultiThreadWaveLeeAlgorithm();
-
         var path = solver.solve(maze, root, goal);
         LOGGER.info(renderer.render(maze, path));
 
@@ -51,16 +48,30 @@ public class MultiThreadWaveLeeAlgorithmTest {
     void shouldReturnEmptyPathInsteadOfPathBecauseOfLackOfSolutionBetweenGivenCells() {
         Generator generator = new EllerAlgorithm(new Random(10));
         Maze maze = generator.generate(4, 5);
+        maze.getCell(3, 3).setRightWall(true); // Создаём изолированную область в идеальном лабиринте
         Renderer renderer = new PrettyPrint();
         LOGGER.info(renderer.render(maze));
-        maze.getCell(3, 3).setRightWall(true); // Создаём изолированную область в идеальном лабиринте
-
         Cell root = maze.getCell(0, 0);
-        LOGGER.info("Введите строку целевой точки: ");
         Cell goal = maze.getCell(1, 4);
 
         Solver solver = new MultiThreadWaveLeeAlgorithm();
+        var path = solver.solve(maze, root, goal);
 
+        assertThat(path)
+            .isNull();
+    }
+
+    @Test
+    void shouldReturnEmptyPathInsteadOfPathBecauseOfMazeHasLoop() {
+        Generator generator = new EllerAlgorithm(new Random(10));
+        Maze maze = generator.generate(4, 5);
+        maze.getCell(2, 3).setDownWall(false); // Создаём петлю
+        Renderer renderer = new PrettyPrint();
+        LOGGER.info(renderer.render(maze));
+        Cell root = maze.getCell(0, 0);
+        Cell goal = maze.getCell(1, 4);
+
+        Solver solver = new MultiThreadWaveLeeAlgorithm();
         var path = solver.solve(maze, root, goal);
 
         assertThat(path)
@@ -71,12 +82,10 @@ public class MultiThreadWaveLeeAlgorithmTest {
     void shouldThrowExceptionBecauseRootIsEqualToGoal() {
         Generator generator = new EllerAlgorithm(new Random(10));
         Maze maze = generator.generate(4, 5);
-
         Cell root = maze.getCell(0, 0);
         Cell goal = maze.getCell(0, 0);
 
         Solver solver = new MultiThreadWaveLeeAlgorithm();
-
         var path = solver.solve(maze, root, goal);
 
         assertThat(path)

@@ -10,6 +10,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class MultiThreadWaveLeeAlgorithm implements Solver {
+    /*
+     * The Lee wave algorithm only works with perfect mazes,
+     *
+     * so an appropriate check is performed in the solve() method.
+     *
+     * Also, a corresponding method was added to the Maze.java.
+     */
     private Maze maze;
     private int[][] dist;
     private final BlockingQueue<Cell> queue = new LinkedBlockingQueue<>();
