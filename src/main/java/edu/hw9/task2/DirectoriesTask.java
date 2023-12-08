@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.RecursiveTask;
-import java.util.stream.Collectors;
 
 public class DirectoriesTask extends RecursiveTask<List<Path>> {
     private final Path root;
@@ -28,29 +27,26 @@ public class DirectoriesTask extends RecursiveTask<List<Path>> {
         if (Files.isRegularFile(root)) {
             return new ArrayList<>();
         }
-        List<Path> filesAndDirectories;
-        try (var pathsStream = Files.list(root)) {
-            filesAndDirectories = pathsStream.collect(Collectors.toList());
+        List<DirectoriesTask> tasks = new ArrayList<>();
+        try (var pathStream = Files.list(root)) {
+            pathStream.forEach(path -> {
+                if (Files.isRegularFile(path)) {
+                    filesInRoot++;
+                } else {
+                    var task = new DirectoriesTask(path, minFilesCount);
+                    task.fork();
+                    tasks.add(task);
+                }
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        List<DirectoriesTask> directoriesTasks = new ArrayList<>();
-        for (Path path : filesAndDirectories) {
-            if (Files.isRegularFile(path)) {
-                filesInRoot++;
-            } else {
-                var task = new DirectoriesTask(path, minFilesCount);
-                task.fork();
-                directoriesTasks.add(task);
-            }
-        }
-
         List<Path> result = new ArrayList<>();
-        for (var directoriesTask : directoriesTasks) {
-            result.addAll(directoriesTask.join());
-            filesInRoot += directoriesTask.getFilesInRoot();
+        for (var task : tasks) {
+            result.addAll(task.join());
+            filesInRoot += task.getFilesInRoot();
         }
-        if (!result.isEmpty() || filesInRoot > minFilesCount) {
+        if (filesInRoot > minFilesCount) {
             result.add(root);
         }
         return result;

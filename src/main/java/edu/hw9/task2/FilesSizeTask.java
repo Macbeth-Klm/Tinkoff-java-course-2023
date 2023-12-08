@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.RecursiveTask;
-import java.util.stream.Collectors;
 
 public class FilesSizeTask extends RecursiveTask<List<Path>> {
     private final Path root;
@@ -32,15 +31,17 @@ public class FilesSizeTask extends RecursiveTask<List<Path>> {
             }
             return result;
         }
-        List<Path> filesAndDirectories;
+        List<FilesSizeTask> tasks = new ArrayList<>();
         try (var pathsStream = Files.list(root)) {
-            filesAndDirectories = pathsStream.collect(Collectors.toList());
+            pathsStream.forEach(path -> {
+                var task = new FilesSizeTask(path, minSize, maxSize);
+                task.fork();
+                tasks.add(task);
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        for (Path path : filesAndDirectories) {
-            var task = new FilesSizeTask(path, minSize, maxSize);
-            task.fork();
+        for (var task : tasks) {
             result.addAll(task.join());
         }
         return result;

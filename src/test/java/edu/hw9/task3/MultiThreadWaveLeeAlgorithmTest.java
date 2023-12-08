@@ -10,6 +10,7 @@ import edu.project2.solution.Solver;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,6 +65,22 @@ public class MultiThreadWaveLeeAlgorithmTest {
         var path = solver.solve(maze, root, goal);
 
         assertThat(path)
-            .isEmpty();
+            .isNull();
+    }
+
+    @Test
+    void shouldThrowExceptionBecauseRootIsEqualToGoal() {
+        Generator generator = new EllerAlgorithm(new Random(10));
+        Maze maze = generator.generate(4, 5);
+
+        Cell root = maze.getCell(0, 0);
+        Cell goal = maze.getCell(0, 0);
+
+        Solver solver = new MultiThreadWaveLeeAlgorithm();
+
+        var path = solver.solve(maze, root, goal);
+
+        assertThat(path)
+            .isNull();
     }
 }

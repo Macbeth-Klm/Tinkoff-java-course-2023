@@ -13,7 +13,7 @@ public class StatsCollectorTest {
         List<StatsCollector.Statistics> result;
 
         try (var statsCollector = new StatsCollector(2)) {
-            Thread producer = new Thread(() -> statsCollector.push("sum", new double[] {1, 2, 3, 4}));
+            Thread producer = new Thread(() -> statsCollector.push("metric", new double[] {1, 2, 3, 4}));
             producer.start();
             producer.join();
             result = statsCollector.stats();
@@ -23,7 +23,7 @@ public class StatsCollectorTest {
 
         assertThat(result)
             .containsExactlyInAnyOrder(
-                new StatsCollector.Statistics("sum", 10)
+                new StatsCollector.Statistics("metric", 10, 2.5, 4, 1)
             );
     }
 
@@ -43,9 +43,9 @@ public class StatsCollectorTest {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                statsCollector.push("sum", new double[] {1, 2, 3, 4});
-                statsCollector.push("average", new double[] {1, 2, 3, 4});
-                statsCollector.push("sum", new double[] {3, 5, 8, 4});
+                statsCollector.push("metric1", new double[] {1, 2, 3, 4});
+                statsCollector.push("metric2", new double[] {1, 2, 3, 4});
+                statsCollector.push("metric3", new double[] {3, 5, 8, 4});
             };
             Runnable secondProducerTasks = () -> {
                 countDownLatch.countDown();
@@ -54,27 +54,25 @@ public class StatsCollectorTest {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                statsCollector.push("min", new double[] {5, 6, 7, 4, 8});
-                statsCollector.push("average", new double[] {3, 5, 8, 4});
-                statsCollector.push("max", new double[] {1, 2, 10, 4, 5, 21});
-                statsCollector.push("sum", new double[] {1, 2, 3, 4});
+                statsCollector.push("metric4", new double[] {5, 6, 7, 4, 8});
+                statsCollector.push("metric5", new double[] {3, 5, 8, 4});
+                statsCollector.push("metric6", new double[] {1, 2, 10, 4, 5, 20});
+                statsCollector.push("metric7", new double[] {1, 2, 3, 4});
             };
             producers.execute(firstProducerTasks);
             producers.execute(secondProducerTasks);
             result = statsCollector.stats();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
 
         assertThat(result)
             .containsExactlyInAnyOrder(
-                new StatsCollector.Statistics("sum", 10),
-                new StatsCollector.Statistics("average", 2.5),
-                new StatsCollector.Statistics("sum", 20),
-                new StatsCollector.Statistics("min", 4),
-                new StatsCollector.Statistics("average", 5),
-                new StatsCollector.Statistics("max", 21),
-                new StatsCollector.Statistics("sum", 10)
+                new StatsCollector.Statistics("metric1", 10, 2.5, 4, 1),
+                new StatsCollector.Statistics("metric2", 10, 2.5, 4, 1),
+                new StatsCollector.Statistics("metric3", 20, 5, 8, 3),
+                new StatsCollector.Statistics("metric4", 30, 6, 8, 4),
+                new StatsCollector.Statistics("metric5", 20, 5, 8, 3),
+                new StatsCollector.Statistics("metric6", 42, 7, 20, 1),
+                new StatsCollector.Statistics("metric7", 10, 2.5, 4, 1)
             );
     }
 }

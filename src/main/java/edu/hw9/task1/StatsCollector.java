@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class StatsCollector implements AutoCloseable {
     private final ExecutorService threadPool;
@@ -22,28 +21,24 @@ public class StatsCollector implements AutoCloseable {
             throw new IllegalArgumentException("Empty input data!");
         }
         threadPool.execute(() -> {
-            double value = switch (metricName) {
-                case "sum" -> Arrays.stream(inputData).sum();
-                case "average" -> Arrays.stream(inputData).average().getAsDouble();
-                case "max" -> Arrays.stream(inputData).max().getAsDouble();
-                case "min" -> Arrays.stream(inputData).min().getAsDouble();
-                default -> throw new IllegalArgumentException("Such metric does not exist!");
-            };
-            statistics.add(new Statistics(metricName, value));
+            var sum = Arrays.stream(inputData).sum();
+            var average = Arrays.stream(inputData).average().getAsDouble();
+            var max = Arrays.stream(inputData).max().getAsDouble();
+            var min = Arrays.stream(inputData).min().getAsDouble();
+            statistics.add(new Statistics(metricName, sum, average, max, min));
         });
     }
 
     public List<Statistics> stats() {
-        return statistics;
+        return Collections.unmodifiableList(statistics);
     }
 
     @Override
     @SuppressWarnings("MagicNumber")
-    public void close() throws InterruptedException {
-        threadPool.shutdown();
-        threadPool.awaitTermination(5000, TimeUnit.MILLISECONDS);
+    public void close() {
+        threadPool.close();
     }
 
-    public record Statistics(String metricName, double value) {
+    public record Statistics(String metricName, double sum, double average, double max, double min) {
     }
 }

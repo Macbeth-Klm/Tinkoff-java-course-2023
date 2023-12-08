@@ -5,88 +5,98 @@ import edu.project2.Maze;
 import edu.project2.solution.Solver;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MultiThreadWaveLeeAlgorithm implements Solver {
-    private Cell end;
     private Maze maze;
     private int[][] dist;
-    private List<Cell> path;
+    private final BlockingQueue<Cell> queue = new LinkedBlockingQueue<>();
 
     public MultiThreadWaveLeeAlgorithm() {
     }
 
     @Override
+    @SuppressWarnings("MagicNumber")
     public List<Cell> solve(Maze maze, Cell root, Cell end) {
-        this.end = end;
+        if (root == end) {
+            return null;
+        }
+        if (!maze.isPerfect()) {
+            return null;
+        }
         this.maze = maze;
         dist = new int[maze.height()][maze.width()];
         dist[root.getRow()][root.getCol()] = 1;
-        path = new ArrayList<>();
-        try (var forkJoinPool = new ForkJoinPool()) {
-            forkJoinPool.invoke(new MazeTask(root));
-            return path.reversed();
+        try (var threadPool = Executors.newFixedThreadPool(4)) {
+            queue.put(root);
+            Cell cell;
+            do {
+                cell = queue.take();
+                var task = new SolverTask(cell);
+                threadPool.execute(task);
+            } while (dist[end.getRow()][end.getCol()] == 0);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+        List<Cell> path = new ArrayList<>();
+        Cell curCell = end;
+        while (curCell != root) {
+            path.add(curCell);
+            List<Cell> nextCells = nextEnableCells(maze, curCell.getRow(), curCell.getCol());
+            for (Cell cell : nextCells) {
+                if (dist[cell.getRow()][cell.getCol()] + 1 == dist[curCell.getRow()][curCell.getCol()]) {
+                    curCell = cell;
+                    break;
+                }
+            }
+        }
+        path.add(root);
+        return path.reversed();
     }
 
-    private class MazeTask extends RecursiveAction {
-        private final Cell currentCell;
+    private List<Cell> nextEnableCells(Maze maze, int row, int col) {
+        List<Cell> nextCells = new ArrayList<>();
+        // верхний сосед
+        if (row > 0 && !maze.getCell(row - 1, col).isDownWall()) {
+            nextCells.add(maze.getCell(row - 1, col));
+        }
+        // правый сосед
+        if (col + 1 < maze.width() && !maze.getCell(row, col).isRightWall()) {
+            nextCells.add(maze.getCell(row, col + 1));
+        }
+        // нижний сосед
+        if (!maze.getCell(row, col).isDownWall()) {
+            nextCells.add(maze.getCell(row + 1, col));
+        }
+        // левый сосед
+        if (col > 0 && !maze.getCell(row, col - 1).isRightWall()) {
+            nextCells.add(maze.getCell(row, col - 1));
+        }
+        return nextCells;
+    }
 
-        private MazeTask(Cell currentCell) {
-            this.currentCell = currentCell;
+    private class SolverTask implements Runnable {
+        private final Cell cell;
+
+        private SolverTask(Cell cell) {
+            this.cell = cell;
         }
 
         @Override
-        protected void compute() {
-            if (currentCell == end) {
-                path.add(currentCell);
-            } else {
-                int row = currentCell.getRow();
-                int col = currentCell.getCol();
-                // верхний сосед
-                if (row > 0
-                    && !maze.getCell(row - 1, col).isDownWall()
-                    && dist[row - 1][col] == 0) {
-                    dist[row - 1][col] = dist[row][col] + 1;
-                    var task = new MazeTask(maze.getCell(row - 1, col));
-                    task.fork();
-                    task.join();
-                }
-                // правый сосед
-                if (col + 1 < maze.width()
-                    && !maze.getCell(row, col).isRightWall()
-                    && dist[row][col + 1] == 0) {
-                    dist[row][col + 1] = dist[row][col] + 1;
-                    var task = new MazeTask(maze.getCell(row, col + 1));
-                    task.fork();
-                    task.join();
-                }
-                // нижний сосед
-                if (!maze.getCell(row, col).isDownWall()
-                    && dist[row + 1][col] == 0) {
-                    dist[row + 1][col] = dist[row][col] + 1;
-                    var task = new MazeTask(maze.getCell(row + 1, col));
-                    task.fork();
-                    task.join();
-                }
-                // левый сосед
-                if (col > 0
-                    && !maze.getCell(row, col - 1).isRightWall()
-                    && dist[row][col - 1] == 0) {
-                    dist[row][col - 1] = dist[row][col] + 1;
-                    var task = new MazeTask(maze.getCell(row, col - 1));
-                    task.fork();
-                    task.join();
-                }
-                if (path.contains(end)) {
-                    var lastAddedCell = path.getLast();
-                    if (dist[currentCell.getRow()][currentCell.getCol()]
-                        == dist[lastAddedCell.getRow()][lastAddedCell.getCol()] - 1) {
-                        path.add(currentCell);
+        public void run() {
+            List<Cell> cells = nextEnableCells(maze, cell.getRow(), cell.getCol());
+            cells.stream()
+                .filter(c -> dist[c.getRow()][c.getCol()] == 0)
+                .forEach(c -> {
+                    dist[c.getRow()][c.getCol()] = dist[cell.getRow()][cell.getCol()] + 1;
+                    try {
+                        queue.put(c);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-                }
-            }
+                });
         }
     }
 }
