@@ -10,10 +10,11 @@ import edu.project2.solution.Solver;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MultiThreadWaveLeeAlgorithmTest {
+public class MultiThreadDfsTest {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Test
@@ -25,7 +26,7 @@ public class MultiThreadWaveLeeAlgorithmTest {
         Cell root = maze.getCell(0, 0);
         Cell goal = maze.getCell(1, 4);
 
-        Solver solver = new MultiThreadWaveLeeAlgorithm();
+        Solver solver = new MultiThreadDfs();
         var path = solver.solve(maze, root, goal);
         LOGGER.info(renderer.render(maze, path));
 
@@ -54,28 +55,11 @@ public class MultiThreadWaveLeeAlgorithmTest {
         Cell root = maze.getCell(0, 0);
         Cell goal = maze.getCell(1, 4);
 
-        Solver solver = new MultiThreadWaveLeeAlgorithm();
+        Solver solver = new MultiThreadDfs();
         var path = solver.solve(maze, root, goal);
 
         assertThat(path)
-            .isNull();
-    }
-
-    @Test
-    void shouldReturnEmptyPathInsteadOfPathBecauseOfMazeHasLoop() {
-        Generator generator = new EllerAlgorithm(new Random(10));
-        Maze maze = generator.generate(4, 5);
-        maze.getCell(2, 3).setDownWall(false); // Создаём петлю
-        Renderer renderer = new PrettyPrint();
-        LOGGER.info(renderer.render(maze));
-        Cell root = maze.getCell(0, 0);
-        Cell goal = maze.getCell(1, 4);
-
-        Solver solver = new MultiThreadWaveLeeAlgorithm();
-        var path = solver.solve(maze, root, goal);
-
-        assertThat(path)
-            .isNull();
+            .isEmpty();
     }
 
     @Test
@@ -85,10 +69,10 @@ public class MultiThreadWaveLeeAlgorithmTest {
         Cell root = maze.getCell(0, 0);
         Cell goal = maze.getCell(0, 0);
 
-        Solver solver = new MultiThreadWaveLeeAlgorithm();
-        var path = solver.solve(maze, root, goal);
+        Solver solver = new MultiThreadDfs();
 
-        assertThat(path)
-            .isNull();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            var path = solver.solve(maze, root, goal);
+        });
     }
 }
