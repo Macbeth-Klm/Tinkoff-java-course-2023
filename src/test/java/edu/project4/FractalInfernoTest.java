@@ -26,8 +26,8 @@ public class FractalInfernoTest {
             25,
             250_000,
             1,
-            NonLinearTransformator.NonLinearType.SPHERE,
-            NonLinearTransformator.NonLinearType.HEART
+            NonLinearType.SPHERE,
+            NonLinearType.HEART
         );
         var endTime = System.nanoTime();
         executionTime.add((endTime - startTime) / 1_000_000);
@@ -40,8 +40,8 @@ public class FractalInfernoTest {
             25,
             50_000,
             1,
-            NonLinearTransformator.NonLinearType.SPHERE,
-            NonLinearTransformator.NonLinearType.HEART
+            NonLinearType.SPHERE,
+            NonLinearType.HEART
         );
         endTime = System.nanoTime();
         executionTime.add((endTime - startTime) / 1_000_000);
@@ -63,8 +63,8 @@ public class FractalInfernoTest {
             25,
             50_000,
             1,
-            NonLinearTransformator.NonLinearType.SPHERE,
-            NonLinearTransformator.NonLinearType.HEART
+            NonLinearType.SPHERE,
+            NonLinearType.HEART
         );
 
         assertThat(image)
@@ -83,8 +83,8 @@ public class FractalInfernoTest {
             25,
             50_000,
             1,
-            NonLinearTransformator.NonLinearType.SPHERE,
-            NonLinearTransformator.NonLinearType.HEART
+            NonLinearType.SPHERE,
+            NonLinearType.HEART
         );
 
         assertThat(image)
@@ -103,8 +103,8 @@ public class FractalInfernoTest {
             25,
             50_000,
             1,
-            NonLinearTransformator.NonLinearType.SPHERE,
-            NonLinearTransformator.NonLinearType.HEART
+            NonLinearType.SPHERE,
+            NonLinearType.HEART
         );
         image.logarithmicGammaCorrection(0.2);
         image.createFile("src/test/java/edu/project4/test");
@@ -128,8 +128,8 @@ public class FractalInfernoTest {
                 25,
                 250_000,
                 1,
-                NonLinearTransformator.NonLinearType.SPHERE,
-                NonLinearTransformator.NonLinearType.HEART
+                NonLinearType.SPHERE,
+                NonLinearType.HEART
             );
         });
 
@@ -141,8 +141,8 @@ public class FractalInfernoTest {
                 25,
                 250_000,
                 1,
-                NonLinearTransformator.NonLinearType.SPHERE,
-                NonLinearTransformator.NonLinearType.HEART
+                NonLinearType.SPHERE,
+                NonLinearType.HEART
             );
         });
 
@@ -154,8 +154,8 @@ public class FractalInfernoTest {
                 25,
                 250_000,
                 1,
-                NonLinearTransformator.NonLinearType.SPHERE,
-                NonLinearTransformator.NonLinearType.HEART
+                NonLinearType.SPHERE,
+                NonLinearType.HEART
             );
         });
 
@@ -167,8 +167,8 @@ public class FractalInfernoTest {
                 -5,
                 250_000,
                 1,
-                NonLinearTransformator.NonLinearType.SPHERE,
-                NonLinearTransformator.NonLinearType.HEART
+                NonLinearType.SPHERE,
+                NonLinearType.HEART
             );
         });
 
@@ -180,8 +180,8 @@ public class FractalInfernoTest {
                 25,
                 0,
                 1,
-                NonLinearTransformator.NonLinearType.SPHERE,
-                NonLinearTransformator.NonLinearType.HEART
+                NonLinearType.SPHERE,
+                NonLinearType.HEART
             );
         });
 
@@ -193,8 +193,8 @@ public class FractalInfernoTest {
                 25,
                 250_000,
                 0,
-                NonLinearTransformator.NonLinearType.SPHERE,
-                NonLinearTransformator.NonLinearType.HEART
+                NonLinearType.SPHERE,
+                NonLinearType.HEART
             );
         });
     }

@@ -23,7 +23,7 @@ public final class FractalInferno {
         int affineCount,
         int iterationsCount,
         int symmetry,
-        NonLinearTransformator.NonLinearType... types
+        NonLinearType... types
     ) {
         if (symmetry <= 0
             || imageHeight <= 0
@@ -54,7 +54,7 @@ public final class FractalInferno {
         int affineCount,
         int iterationsCount,
         int symmetry,
-        NonLinearTransformator.NonLinearType... types
+        NonLinearType... types
     ) {
         if (symmetry <= 0
             || imageHeight <= 0
@@ -70,8 +70,8 @@ public final class FractalInferno {
                 pixels[i][j] = new Pixel();
             }
         }
+        AffineTransformation[] affines = createAffineTransformation(affineCount);
         try (var executorService = Executors.newFixedThreadPool(4)) {
-            AffineTransformation[] affines = createAffineTransformation(affineCount);
             for (int n = 0; n < pointsCount; n++) {
                 executorService.execute(() -> render(
                     imageHeight,
@@ -92,20 +92,20 @@ public final class FractalInferno {
         int iterationsCount,
         int symmetry,
         AffineTransformation[] affines,
-        NonLinearTransformator.NonLinearType... types
+        NonLinearType... types
     ) {
         var x = ThreadLocalRandom.current().nextDouble(X_MIN, X_MAX);
         var y = ThreadLocalRandom.current().nextDouble(Y_MIN, Y_MAX);
+        Point point = new Point(x, y);
         var type = types[ThreadLocalRandom.current().nextInt(0, types.length)];
         for (int tempIter = 0; tempIter < iterationsCount; tempIter++) {
             var affine = affines[ThreadLocalRandom.current().nextInt(0, affines.length)];
-            x = affine.a() * x + affine.b() * y + affine.c();
-            y = affine.d() * x + affine.e() * y + affine.f();
-            Point point = NonLinearTransformator.getPoint(x, y, type);
+            point = Point.makeAffineTransformation(point, affine);
+            point = Point.makeNonLinearTransformation(point, type);
             var theta = 0.0;
             for (int s = 0; s < symmetry; s++) {
                 theta += (Math.PI * 2) / symmetry;
-                var rotated = rotate(point, theta);
+                var rotated = Point.rotate(point, theta);
                 x = rotated.x();
                 y = rotated.y();
                 if (X_MIN <= x && x <= X_MAX && Y_MIN <= y && y <= Y_MAX) {
@@ -163,11 +163,5 @@ public final class FractalInferno {
             result[i] = new AffineTransformation(a, b, c, d, e, f, red, green, blue);
         }
         return result;
-    }
-
-    private Point rotate(Point point, double theta) {
-        double xRotated = point.x() * Math.cos(theta) - point.y() * Math.sin(theta);
-        double yRotated = point.x() * Math.sin(theta) + point.y() * Math.cos(theta);
-        return new Point(xRotated, yRotated);
     }
 }

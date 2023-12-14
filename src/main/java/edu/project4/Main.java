@@ -11,13 +11,13 @@ public final class Main {
             1080,
             1920,
             100,
-            25,
-            1_000_000,
-            5,
-            NonLinearTransformator.NonLinearType.SPHERE,
-            NonLinearTransformator.NonLinearType.HEART
+            10,
+            500_000,
+            3,
+            NonLinearType.SPHERE,
+            NonLinearType.HEART
         );
         image.logarithmicGammaCorrection(0.2);
-        image.createFile("src/main/java/edu/project4/images/Fractal_Inferno");
+        image.createFile("src/main/java/edu/project4/images/Fractal_Inferno_attempt2");
     }
 }
