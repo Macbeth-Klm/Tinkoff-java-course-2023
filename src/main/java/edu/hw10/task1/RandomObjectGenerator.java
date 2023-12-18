@@ -79,7 +79,7 @@ public class RandomObjectGenerator {
                     paramsValue[i] = ThreadLocalRandom.current().nextInt(min, max);
                 }
             } else {
-                throw new RuntimeException("Method / C-tor contains parameters that cannot be generated!");
+                throw new RuntimeException("Method/C-tor contains parameters that cannot be generated!");
             }
         }
         return paramsValue;

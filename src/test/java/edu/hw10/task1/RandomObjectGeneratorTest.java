@@ -72,7 +72,7 @@ public class RandomObjectGeneratorTest {
         });
 
         Assertions.assertEquals(
-            "java.lang.RuntimeException: Method / C-tor contains parameters that cannot be generated!",
+            "java.lang.RuntimeException: Method/C-tor contains parameters that cannot be generated!",
             ex.getMessage()
         );
     }
