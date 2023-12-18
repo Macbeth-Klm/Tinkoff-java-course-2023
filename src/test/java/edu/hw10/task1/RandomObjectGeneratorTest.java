@@ -3,6 +3,8 @@ package edu.hw10.task1;
 import edu.hw10.task1.Classes.MyClass;
 import edu.hw10.task1.Classes.MyRecord;
 import edu.hw10.task1.Classes.MyRecordWithAnnotations;
+import edu.hw8.task3.PasswordMiner;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -61,5 +63,17 @@ public class RandomObjectGeneratorTest {
                     && instance.weight() >= 80
             );
         }
+    }
+
+    @Test
+    void shouldThrowExceptionBecauseMethodOrCtorContainsParametersThatCannotBeGenerated() {
+        RuntimeException ex = Assertions.assertThrows(RuntimeException.class, () -> {
+            var passwordMinerInstance = rog.nextObject(PasswordMiner.class);
+        });
+
+        Assertions.assertEquals(
+            "java.lang.RuntimeException: Method / C-tor contains parameters that cannot be generated!",
+            ex.getMessage()
+        );
     }
 }

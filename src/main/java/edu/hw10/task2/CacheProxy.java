@@ -9,25 +9,27 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CacheProxy implements InvocationHandler {
     private final Object target;
-    private static final Map<String, Object> MEMORY_CACHE = new HashMap<>();
+    private final Map<String, Object> memoryCache = new HashMap<>();
+    private final Path discCachePath;
 
-    private CacheProxy(Object target) {
+    private CacheProxy(Object target, Path discCachePath) {
         this.target = target;
+        this.discCachePath = discCachePath;
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T create(T target, Class<T> interfaceClass) {
+    public static <T> T create(T target, Class<T> interfaceClass, Path discCachePath) {
         return (T) Proxy.newProxyInstance(
             interfaceClass.getClassLoader(),
             new Class<?>[] {interfaceClass},
-            new CacheProxy(target)
+            new CacheProxy(target, discCachePath)
         );
     }
 
@@ -38,7 +40,7 @@ public class CacheProxy implements InvocationHandler {
             Object result;
             String cacheKey = method.getName() + Arrays.deepToString(args);
             if (cacheAnnotation.persist()) {
-                File cacheFile = new File("src/main/java/edu/hw10/task2/cache/" + cacheKey + ".txt");
+                File cacheFile = new File(discCachePath.toFile(), cacheKey + ".txt");
                 if (cacheFile.exists()) {
                     try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(cacheFile))) {
                         result = in.readObject();
@@ -53,18 +55,14 @@ public class CacheProxy implements InvocationHandler {
                         throw new RuntimeException(e);
                     }
                 }
-            } else if (MEMORY_CACHE.containsKey(cacheKey)) {
-                result = MEMORY_CACHE.get(cacheKey);
+            } else if (memoryCache.containsKey(cacheKey)) {
+                result = memoryCache.get(cacheKey);
             } else {
                 result = method.invoke(target, args);
-                MEMORY_CACHE.put(cacheKey, result);
+                memoryCache.put(cacheKey, result);
             }
             return result;
         }
         return method.invoke(target, args);
-    }
-
-    public static Map<String, Object> getMemoryCache() {
-        return Collections.unmodifiableMap(MEMORY_CACHE);
     }
 }
