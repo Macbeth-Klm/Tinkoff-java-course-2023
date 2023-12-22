@@ -15,7 +15,7 @@ public class Task1Test {
 
         Class<?> task1Class = new ByteBuddy()
             .subclass(Object.class)
-            .method(ElementMatchers.named("toString"))
+            .method(ElementMatchers.isToString())
             .intercept(FixedValue.value(helloByteBuddy))
             .make()
             .load(getClass().getClassLoader())
