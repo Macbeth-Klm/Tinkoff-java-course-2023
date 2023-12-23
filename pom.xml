@@ -103,7 +103,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- JMH -->
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
@@ -116,6 +115,8 @@
             <version>${jmh.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- ByteBuddy -->
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
