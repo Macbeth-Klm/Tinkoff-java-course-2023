@@ -1,13 +1,16 @@
 package edu.project2;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import edu.project2.maze.Cell;
+import edu.project2.maze.Maze;
+import edu.project2.maze.MazeExplorer;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MazeExplorerTest {

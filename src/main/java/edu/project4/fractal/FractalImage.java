@@ -1,4 +1,4 @@
-package edu.project4;
+package edu.project4.fractal;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

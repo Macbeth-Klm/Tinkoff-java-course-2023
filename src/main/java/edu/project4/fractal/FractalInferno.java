@@ -1,4 +1,4 @@
-package edu.project4;
+package edu.project4.fractal;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;

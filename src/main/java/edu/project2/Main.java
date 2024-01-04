@@ -1,5 +1,6 @@
 package edu.project2;
 
+import edu.project2.maze.MazeExplorer;
 import java.util.Random;
 import java.util.Scanner;
 

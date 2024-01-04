@@ -1,11 +1,12 @@
 package edu.project2;
 
-import edu.project2.rendering.PrettyPrint;
-import edu.project2.rendering.Renderer;
-import org.junit.jupiter.api.Test;
+import edu.project2.maze.MazeExplorer;
+import edu.project2.maze.rendering.PrettyPrint;
+import edu.project2.maze.rendering.Renderer;
 import java.io.ByteArrayInputStream;
 import java.util.Random;
 import java.util.Scanner;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RenderTest {

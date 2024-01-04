@@ -1,5 +1,6 @@
 package edu.project1;
 
+import edu.project1.hangman.ConsoleHangman;
 import java.util.Random;
 import java.util.Scanner;
 

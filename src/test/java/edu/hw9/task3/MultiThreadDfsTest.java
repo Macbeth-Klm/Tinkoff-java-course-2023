@@ -1,12 +1,12 @@
 package edu.hw9.task3;
 
-import edu.project2.Cell;
-import edu.project2.Maze;
-import edu.project2.generation.EllerAlgorithm;
-import edu.project2.generation.Generator;
-import edu.project2.rendering.PrettyPrint;
-import edu.project2.rendering.Renderer;
-import edu.project2.solution.Solver;
+import edu.project2.maze.Cell;
+import edu.project2.maze.Maze;
+import edu.project2.maze.generation.EllerAlgorithm;
+import edu.project2.maze.generation.Generator;
+import edu.project2.maze.rendering.PrettyPrint;
+import edu.project2.maze.rendering.Renderer;
+import edu.project2.maze.solution.Solver;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

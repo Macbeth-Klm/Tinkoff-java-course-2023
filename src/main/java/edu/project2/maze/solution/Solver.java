@@ -1,7 +1,7 @@
-package edu.project2.solution;
+package edu.project2.maze.solution;
 
-import edu.project2.Cell;
-import edu.project2.Maze;
+import edu.project2.maze.Cell;
+import edu.project2.maze.Maze;
 import java.util.List;
 
 public interface Solver {

@@ -1,8 +1,8 @@
 package edu.hw9.task3;
 
-import edu.project2.Cell;
-import edu.project2.Maze;
-import edu.project2.solution.Solver;
+import edu.project2.maze.Cell;
+import edu.project2.maze.Maze;
+import edu.project2.maze.solution.Solver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;

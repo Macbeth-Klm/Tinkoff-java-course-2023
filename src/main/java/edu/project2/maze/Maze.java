@@ -1,4 +1,4 @@
-package edu.project2;
+package edu.project2.maze;
 
 public record Maze(int height, int width, Cell[][] grid) {
 

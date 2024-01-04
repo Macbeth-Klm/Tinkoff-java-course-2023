@@ -1,9 +1,11 @@
 package edu.project1;
 
-import org.junit.jupiter.api.Test;
+import edu.project1.hangman.ConsoleHangman;
+import edu.project1.hangman.Session;
 import java.io.ByteArrayInputStream;
 import java.util.Random;
 import java.util.Scanner;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Project1Test {

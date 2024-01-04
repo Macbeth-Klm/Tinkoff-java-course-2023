@@ -1,5 +1,8 @@
 package edu.project4;
 
+import edu.project4.fractal.FractalInferno;
+import edu.project4.fractal.NonLinearType;
+
 public final class Main {
     private Main() {
     }

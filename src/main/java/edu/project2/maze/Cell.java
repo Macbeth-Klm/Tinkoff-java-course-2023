@@ -1,4 +1,4 @@
-package edu.project2;
+package edu.project2.maze;
 
 public class Cell {
     private final int row;

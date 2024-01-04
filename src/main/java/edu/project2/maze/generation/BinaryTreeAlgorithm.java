@@ -1,7 +1,7 @@
-package edu.project2.generation;
+package edu.project2.maze.generation;
 
-import edu.project2.Cell;
-import edu.project2.Maze;
+import edu.project2.maze.Cell;
+import edu.project2.maze.Maze;
 import java.util.Random;
 
 public class BinaryTreeAlgorithm implements Generator {

@@ -1,5 +1,7 @@
 package edu.project4;
 
+import edu.project4.fractal.FractalInferno;
+import edu.project4.fractal.NonLinearType;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

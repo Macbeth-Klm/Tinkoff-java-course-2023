@@ -1,4 +1,4 @@
-package edu.project4;
+package edu.project4.fractal;
 
 public record Point(double x, double y) {
     public static Point makeAffineTransformation(Point point, AffineTransformation affine) {

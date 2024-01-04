@@ -1,12 +1,12 @@
-package edu.project2;
+package edu.project2.maze;
 
-import edu.project2.generation.BinaryTreeAlgorithm;
-import edu.project2.generation.EllerAlgorithm;
-import edu.project2.generation.Generator;
-import edu.project2.rendering.PrettyPrint;
-import edu.project2.rendering.Renderer;
-import edu.project2.solution.LeeWaveAlgorithm;
-import edu.project2.solution.Solver;
+import edu.project2.maze.generation.BinaryTreeAlgorithm;
+import edu.project2.maze.generation.EllerAlgorithm;
+import edu.project2.maze.generation.Generator;
+import edu.project2.maze.rendering.PrettyPrint;
+import edu.project2.maze.rendering.Renderer;
+import edu.project2.maze.solution.LeeWaveAlgorithm;
+import edu.project2.maze.solution.Solver;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;

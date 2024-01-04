@@ -1,11 +1,13 @@
 package edu.project4;
 
+import edu.project4.fractal.AffineTransformation;
+import edu.project4.fractal.Point;
 import org.junit.jupiter.api.Test;
-import static edu.project4.NonLinearType.DISK;
-import static edu.project4.NonLinearType.HEART;
-import static edu.project4.NonLinearType.POLAR;
-import static edu.project4.NonLinearType.SIN;
-import static edu.project4.NonLinearType.SPHERE;
+import static edu.project4.fractal.NonLinearType.DISK;
+import static edu.project4.fractal.NonLinearType.HEART;
+import static edu.project4.fractal.NonLinearType.POLAR;
+import static edu.project4.fractal.NonLinearType.SIN;
+import static edu.project4.fractal.NonLinearType.SPHERE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PointTest {

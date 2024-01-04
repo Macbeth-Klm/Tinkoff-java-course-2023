@@ -1,4 +1,4 @@
-package edu.project1;
+package edu.project1.hangman;
 
 import java.util.Scanner;
 
